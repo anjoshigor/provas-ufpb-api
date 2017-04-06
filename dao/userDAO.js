@@ -1,15 +1,14 @@
 var fs = require('fs');
+var db = require('../database.json');
 
-class UserDAO {
-  const PATH = '../../database.json';
-
-  load() {
-    return new Map(JSON.parse(fs.readFileSync(PATH, 'utf-8')));
-  }
-  save(map) {
-    fs.write(PATH, JSON.stringify(map), 'utf-8', function(err) {
-      if(err) throw err;
-    });
-  }
+function load() {
+  return new Map(db);
 }
-module.exports = UserDAO;
+
+function save(map) {
+  // fs.write('../database.json', JSON.stringify(map), 'utf-8', (err) => {
+  //   if(err) throw err;
+  // });
+}
+
+module.exports = { load: load, save: save };
