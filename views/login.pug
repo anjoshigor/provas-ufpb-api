@@ -1,0 +1,12 @@
+extends layout
+
+block head
+  link(rel='stylesheet', href='/stylesheets/sigin.css')    
+
+block content
+  .container
+    form.form-signin(action="/index", method="post")
+      h2.form-signin-heading Bem-vindo
+      input#inputLogin.form-control(type='text', name='login', placeholder='Usuário', required='', autofocus='')
+      input#inputPassword.form-control(type='password', name='password' placeholder='Senha', required='')
+      button.btn.btn-lg.btn-primary.btn-block(type='submit') Entrar
