@@ -10,7 +10,7 @@ class UserController {
   }
 
   add(user) {
-    this._userMap.set(user.login(), user.password());
+    this._userMap.set(user.login, user.password);
   }
 
   delete(login) {

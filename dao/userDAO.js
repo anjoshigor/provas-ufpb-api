@@ -2,13 +2,16 @@ var fs = require('fs');
 var db = require('../database.json');
 
 function load() {
-  return new Map(db);
+	return new Map(db);
 }
 
 function save(map) {
-  // fs.write('../database.json', JSON.stringify(map), 'utf-8', (err) => {
-  //   if(err) throw err;
-  // });
+	console.log(map)
+	var file = 'database.json'
+    json = JSON.stringify([...map]); //convertendo para json
+    if(fs.existsSync(file)){
+    	fs.writeFileSync(file, json, 'utf8'); // escrevendo no arquivo 
+    }
 }
 
 module.exports = { load: load, save: save };
