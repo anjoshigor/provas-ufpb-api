@@ -6,8 +6,8 @@ function load() {
 }
 
 function save(map) {
-	console.log(map)
-	var file = 'database.json'
+	console.log(map);
+	var file = 'database.json';
     json = JSON.stringify([...map]); //convertendo para json
     if(fs.existsSync(file)){
     	fs.writeFileSync(file, json, 'utf8'); // escrevendo no arquivo 

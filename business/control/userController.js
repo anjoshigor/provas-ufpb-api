@@ -1,16 +1,17 @@
 var fs = require('fs');
-var load = require('../../dao/userDAO').load;
-var save = require('../../dao/userDAO').save;
+var db = require('../../dao/userDAO');
 
 var User = require('../model/user');
 
 class UserController {
   constructor(){
-    this._userMap = load();
+    this._userMap = db.load();
   }
 
   add(user) {
     this._userMap.set(user.login, user.password);
+    db.save(this.userMap);
+
   }
 
   delete(login) {
