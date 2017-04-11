@@ -1,6 +1,95 @@
 extends layout
 
+block head
+	meta(charset='utf-8')
+	meta(http-equiv='X-UA-Compatible', content='IE=edge')
+	meta(name='viewport', content='width=device-width, initial-scale=1')
+	link(rel='stylesheet', href='/stylesheets/carousel.css')
+	link(rel='stylesheet', href='/stylesheets/viewsource.css')
 block content
-	.container
-		h1= title
-		p Welcome to #{title}
+	.navbar-wrapper
+		.container
+			nav.navbar.navbar-inverse.navbar-static-top
+				.container
+					.navbar-header
+						button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
+							span.sr-only Toggle navigation
+							span.icon-bar
+							span.icon-bar
+							span.icon-bar 
+						a.navbar-brand(href='/') API | PROVAS UFPB 
+							#navbar.navbar-collapse.collapse
+							ul.nav.navbar-nav
+								li.active
+									a(href='/') Home
+								li
+									a(href="/api-admin") Login
+								li
+									a(href='#') Docs
+								li
+									a(href='#') About
+
+			#myCarousel.carousel.slide(data-ride='carousel')
+				ol.carousel-indicators
+					li.active(data-target='#myCarousel', data-slide-to='0')
+				.carousel-indicators
+					li.active(data-target='#myCarousel', data-slide-to='0')
+				.carousel-inner(role='listbox')
+					.item.active
+						img.first-slide(src='data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==', alt='First slide')
+						.container
+							.carousel-caption
+								h1 Atualização V 0.1
+								p
+									| Note: If you&apos;re viewing this page via a
+									code file://
+									|  URL, the &quot;next&quot; and &quot;previous&quot; Glyphicon buttons on the left and right might not load/display properly due to web browser security rules.
+								p
+									a.btn.btn-lg.btn-primary(href='#', role='button') Read more
+				a.left.carousel-control(href='#myCarousel', role='button', data-slide='prev')
+					span.glyphicon.glyphicon-chevron-left(aria-hidden='true')
+					|  
+					span.sr-only Previous
+				a.right.carousel-control(href='#myCarousel', role='button', data-slide='next')
+					span.glyphicon.glyphicon-chevron-right(aria-hidden='true')
+					|  
+					span.sr-only Next
+			.container.marketing
+				.row
+					.col-lg-4
+						img.img-circle(src='https://avatars3.githubusercontent.com/u/12614076?v=3&s=460', alt='Generic placeholder image', width='140', height='140')
+						h2 Diogo Dantas
+						p 
+							|Aqui é Body Builder Ipsum PORRA! Sai filho da puta! É 13 porra! É esse que a gente quer, é ele que nóis vamo buscar. Vo derrubar tudo essas árvore do parque ibirapuera. É nóis caraio é trapezera buscando caraio! Negativa Bambam negativa.
+						p
+							a.btn.btn-info(href='https://github.com/DiogoDantas', role='button') View details &raquo;
+					.col-lg-4
+						img.img-circle(src='https://avatars1.githubusercontent.com/u/9979382?v=3&s=460', alt=' Higor Anjos image', width='140', height='140')
+						h2 Higor Anjos
+						p 
+							|
+						p
+							a.btn.btn-info(href='https://github.com/anjoshigor', role='button') View details &raquo;
+					.col-lg-4
+						img.img-circle(src='https://avatars3.githubusercontent.com/u/14192985?v=3&s=460', alt='Marcos Alves image', width='140', height='140')
+						h2 Marcos Alves
+						p
+							|Aqui é Body Builder Ipsum PORRA! Eu quero esse 13 daqui a pouquinho aí. Birl! Sai filho da puta! Negativa Bambam negativa. Sabe o que é isso daí? Trapézio descendente é o nome disso aí. Boraaa, Hora do Show Porra.
+						p
+							a.btn.btn-info(href='https://github.com/alvesmarcos', role='button') View details &raquo;				
+				hr.featurette-divider
+				.row.featurette
+					.col-md-7
+						h1.featurette.heading Documentação
+						p.lead 
+							|Aqui é Body Builder Ipsum PORRA! Vo derrubar tudo essas árvore do parque ibirapuera. Ajuda o maluco que tá doente. Vem porra! É 37 anos caralho! É esse que a gente quer, é ele que nóis vamo buscar. Birl!
+						a.btn.btn-md.btn-info(href='#', role='button') Documentação
+
+					.col-md-5
+						img.featurette-image.img-responsive.center-block(src='https://developers.google.com/webmasters/mobile-sites/imgs/mobile-seo/transition.png?hl=pt-br', alt='Generic placeholder image')
+				hr.featurette-divider
+				footer
+				p.pull-right
+					a(href='/') Back to top
+				p 
+					|&copy; 2017 API - Provas Universidade Federal da Paraíba
