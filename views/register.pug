@@ -1,0 +1,13 @@
+extends layout
+
+block head
+  link(rel='stylesheet', href='/stylesheets/sigin.css')    
+
+block content
+  .container
+    form.form-signin(action="/register", method="post")
+      h2.form-signin-heading Registre-se
+      input#inputLogin.form-control(type='text', name='login', placeholder='Usuário', required='', autofocus='')
+      input#inputPassword.form-control(type='password', name='password' placeholder='Senha', required='')
+      button.btn.btn-lg.btn-success.btn-block(type='submit') Registrar
+      include messages

@@ -9,7 +9,7 @@ var UserController = require('../business/control/userController')
 var controller = new UserController();
 
 router.get('/', (req, res, next) => {
-  res.render('login', { title: 'Authentication | API' });
+  res.render('register', { title: 'Register | API' });
 });
 
 router.post('/', (req, res, next) => {
@@ -17,9 +17,9 @@ router.post('/', (req, res, next) => {
 
   try {
     controller.add(new_user);
-    res.render('login', { flash: { type: 'alert-success', msg: 'Login efetuado com sucesso!' } });
+    res.render('register', { flash: { type: 'alert-success', msg: 'Registro efetuado com sucesso!' } });
   } catch (error) {
-    res.render('login', { flash: { type: 'alert-danger', msg: error.message } });
+    res.render('register', { flash: { type: 'alert-danger', msg: error.message } });
   }
 
 });
