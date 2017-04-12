@@ -8,7 +8,7 @@ var RegisterValidator = require('../../util/registerValidator');
 
 class UserController {
   constructor() {
-    this._UserDAO = new UserDAO(new FileDatabase('/home/anjoshigor/Documents/provas-ufpb-api/database.json'));
+    this._UserDAO = new UserDAO(new FileDatabase('./database.json'));
   }
 
   add(user) {
