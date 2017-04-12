@@ -9,6 +9,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var login = require('./routes/login');
 var register = require('./routes/register');
+var dashboard = require('./routes/dashboard');
 
 var app = express();
 
@@ -28,6 +29,8 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/api-admin', login);
 app.use('/register', register);
+// provisório
+app.use('/dashboard', dashboard);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,0 +1,157 @@
+include header
+#page-wrapper
+  .row
+    .col-lg-12
+      h1.page-header Dashboard
+  .row
+    .col-lg-3.col-md-6
+      .panel.panel-primary
+        .panel-heading
+          .row
+            .col-xs-3
+              i.fa.fa-shield.fa-5x
+            .col-xs-9.text-right
+              // numero de administradores no sistemas
+              .huge 3
+              div Administradores
+        a(href='#')
+          .panel-footer
+            span.pull-left Ver Detalhes
+            span.pull-right
+              i.fa.fa-arrow-circle-right
+            .clearfix
+    .col-lg-3.col-md-6
+      .panel.panel-green
+        .panel-heading
+          .row
+            .col-xs-3
+              i.fa.fa-users.fa-5x
+            .col-xs-9.text-right
+              // numero de chaves no banco
+              .huge 0 
+              div Usuários
+        a(href='#')
+          .panel-footer
+            span.pull-left Ver Detalhes
+            span.pull-right
+              i.fa.fa-arrow-circle-right
+            .clearfix
+    .col-lg-3.col-md-6
+      .panel.panel-yellow
+        .panel-heading
+          .row
+            .col-xs-3
+              i.fa.fa-file-text.fa-5x
+            .col-xs-9.text-right
+              // quantidade de provas cadastradas no banco
+              .huge 0 
+              div Provas Cadastradas
+        a(href='#')
+          .panel-footer
+            span.pull-left Ver Detalhes
+            span.pull-right
+              i.fa.fa-arrow-circle-right
+            .clearfix
+    .col-lg-3.col-md-6
+      .panel.panel-red
+        .panel-heading
+          .row
+            .col-xs-3
+              i.fa.fa-code.fa-5x
+            .col-xs-9.text-right
+              // numero de funções que API terá
+              .huge 4
+              div Funcionalidades 
+        a(href='#')
+          .panel-footer
+            span.pull-left Ver Detalhes
+            span.pull-right
+              i.fa.fa-arrow-circle-right
+            .clearfix
+  .row
+    .col-lg-8
+      .panel.panel-default
+        .panel-heading  Consumidores da API 
+        .panel-body
+          .table-responsive
+            table.table
+              thead
+                tr
+                  th #
+                  th Token
+                  th E-mail
+              tbody
+                tr
+                  td 1
+                  td YyqWusX323
+                  td api@mail.com
+                tr
+                  td 2
+                  td SxsmSmdA32
+                  td ufpb@mail.com
+                tr
+                  td 3
+                  td 32XasbYewS
+                  td ci@mail.com
+    .col-lg-4
+      .panel.panel-default
+        .panel-heading
+          i.fa.fa-retweet.fa-fw
+          |  Atualizações Recentes
+        .panel-body
+          .list-group
+            a.list-group-item(href='#')
+              i.fa.fa-comment.fa-fw
+              |  New Comment 
+              span.pull-right.text-muted.small
+                em 4 minutes ago
+            a.list-group-item(href='#')
+              i.fa.fa-twitter.fa-fw
+              |  3 New Followers 
+              span.pull-right.text-muted.small
+                em 12 minutes ago
+            a.list-group-item(href='#')
+              i.fa.fa-envelope.fa-fw
+              |  Message Sent 
+              span.pull-right.text-muted.small
+                em 27 minutes ago
+            a.list-group-item(href='#')
+              i.fa.fa-tasks.fa-fw
+              |  New Task 
+              span.pull-right.text-muted.small
+                em 43 minutes ago
+            a.list-group-item(href='#')
+              i.fa.fa-upload.fa-fw
+              |  Server Rebooted 
+              span.pull-right.text-muted.small
+                em 11:32 AM
+            a.list-group-item(href='#')
+              i.fa.fa-bolt.fa-fw
+              |  Server Crashed! 
+              span.pull-right.text-muted.small
+                em 11:13 AM
+            a.list-group-item(href='#')
+              i.fa.fa-warning.fa-fw
+              |  Server Not Responding 
+              span.pull-right.text-muted.small
+                em 10:57 AM
+            a.list-group-item(href='#')
+              i.fa.fa-shopping-cart.fa-fw
+              |  New Order Placed 
+              span.pull-right.text-muted.small
+                em 9:49 AM
+            a.list-group-item(href='#')
+              i.fa.fa-money.fa-fw
+              |  Payment Received 
+              span.pull-right.text-muted.small
+                em Yesterday
+          |  
+          a.btn.btn-default.btn-block(href='#') View All Alerts
+      .panel.panel-default
+        .panel-heading
+          i.fa.fa-code.fa-fw
+          |  Código 
+        .panel-body
+          #morris-donut-chart
+          |  
+          a.btn.btn-default.btn-block(href='#') Baixar arquivo .ZIP
