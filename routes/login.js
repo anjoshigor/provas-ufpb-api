@@ -5,14 +5,6 @@ var User = require('../business/model/user')
 
 //Importando controller do usuario
 var LoginController = require('../business/control/loginController')
-/******
- * testsstsets
- * ****/
-var UserDAO = require('../infra/dao/userDAO').UserDAO;
-var FileDatabase = require('../infra/dao/userDAO').FileDatabase;
-/******
- * testsstsets
- * ****/
 
 var controller = new LoginController();
 
