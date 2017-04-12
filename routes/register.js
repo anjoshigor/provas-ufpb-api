@@ -4,9 +4,9 @@ var router = express.Router();
 var User = require('../business/model/user')
 
 //Importando controller do usuario
-var UserController = require('../business/control/userController')
+var RegisterController = require('../business/control/registerController')
 
-var controller = new UserController();
+var controller = new RegisterController();
 
 router.get('/', (req, res, next) => {
   res.render('register', { title: 'Register | API' });
@@ -16,7 +16,7 @@ router.post('/', (req, res, next) => {
   var new_user = new User(req.body.login, req.body.password);
 
   try {
-    controller.add(new_user);
+    controller.register(new_user);
     res.render('register', { flash: { type: 'alert-success', msg: 'Registro efetuado com sucesso!' } });
   } catch (error) {
     res.render('register', { flash: { type: 'alert-danger', msg: error.message } });
