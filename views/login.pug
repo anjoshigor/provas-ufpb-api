@@ -1,7 +1,7 @@
 extends layout
 
 block head
-  link(rel='stylesheet', href='/stylesheets/sigin.css')    
+  link(rel='stylesheet', href='/templates/css/sigin.css')    
 
 block content
   .container
@@ -10,3 +10,8 @@ block content
       input#inputLogin.form-control(type='text', name='login', placeholder='Usuário', required='', autofocus='')
       input#inputPassword.form-control(type='password', name='password' placeholder='Senha', required='')
       button.btn.btn-lg.btn-primary.btn-block(type='submit') Entrar
+      |  Não possui cadastro? 
+      a.btn.btn-link(href='/register', role='button') Cadastre-se
+      |
+      a.btn.btn-link.btn-block(href='/', role='button') Voltar
+      include messages

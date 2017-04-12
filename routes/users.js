@@ -1,9 +1,12 @@
 var express = require('express');
 var router = express.Router();
+var UserController = require('../business/control/userController');
+
+var control = new UserController();
 
 /* GET users listing. */
 router.get('/', (req, res, next) => {
-  res.send('respond with a resource');
+  res.send(JSON.stringify([...control.getAll()]));
 });
 
 module.exports = router;
