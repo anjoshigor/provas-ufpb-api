@@ -1,5 +1,6 @@
 var fs = require('fs');
-var db = require('../../infra/dao/userDAO');
+var UserDAO = require('../../infra/dao/userDAO').UserDAO;
+var FileDatabase = require('../../infra/dao/userDAO').FileDatabase;
 var InternalError = require('../../infra/error').InternalError;
 var RegisterError = require('../../infra/error').RegisterError;
 var User = require('../model/user');
@@ -7,15 +8,12 @@ var RegisterValidator = require('../../util/registerValidator');
 
 class UserController {
   constructor() {
-    this._userMap = db.load();
-    this._validator = new RegisterValidator();
+    this._UserDAO = new UserDAO(new FileDatabase('/home/anjoshigor/Documents/provas-ufpb-api/database.json'));
   }
 
   add(user) {
     try {
-      this._validator.validate(user);
-      this._userMap.set(user.login, user.password);
-      db.save(this.userMap);
+      this._UserDAO.addUser(user);
     } catch (error) {
       if (error instanceof RegisterError) {
         throw error;
@@ -27,22 +25,49 @@ class UserController {
   }
 
 
-  delete(login) {
-    this._userMap.delete(login);
+  delete(user) {
+    try {
+      this._UserDAO.deleteUser(user)
+    } catch (error) {
+      if (error instanceof RegisterError) {
+        throw error;
+      } else {
+        console.error(error);
+        throw new InternalError('Erro interno do sistema, tente novamente mais tarde ou procure o admin');
+      }
+    }
   }
 
-  get(login) {
-    if (this.hasUser(login))
-      return new User(login, this._userMap(login));
+  getUser(user) {
+    var foundUser;
+    try {
+      foundUser = this._UserDAO.getUser(user);
+      return foundUser;
+    } catch (error) {
+      if (error instanceof RegisterError) {
+        throw error;
+      } else {
+        console.error(error);
+        throw new InternalError('Erro interno do sistema, tente novamente mais tarde ou procure o admin');
+      }
+    }
   }
 
-  hasUser(login) {
-    return this._userMap.has(login);
+  getAll() {
+    var usersMap;
+    try {
+      usersMap = this._UserDAO.getUsers();
+      return usersMap;
+    } catch (error) {
+      if (error instanceof RegisterError) {
+        throw error;
+      } else {
+        console.error(error);
+        throw new InternalError('Erro interno do sistema, tente novamente mais tarde ou procure o admin');
+      }
+    }
   }
 
-  get userMap() {
-    return this._userMap;
-  }
 }
 
 module.exports = UserController;
