@@ -3,11 +3,19 @@ var IOError = require('../error').IOError;
 var RegisterError = require('../error').RegisterError;
 var User = require('../../business/model/user');
 
+/**Singleton **/
+var instance = null;
 
 class UserDAO {
 
 	constructor(database) {
+		if (!instance) {
+			instance = this;
+		}
+
 		this._database = database;
+		return instance;
+
 	}
 
 	getUsers() {
