@@ -1,2 +1,2 @@
 # provas-ufpb-api
-Uma api de provas da universidade federal da praíba
+Uma api de provas da universidade federal da paraíba
