@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
-var User = require("../business/model/user.js");
-var RegisterValidator = require('../util/registerValidator.js');
+var User = require("../app_server/business/model/user.js");
+var RegisterValidator = require('../app_server/util/registerValidator.js');
 
 describe("RegisterValidator Teste", function () {
 	describe("Teste do Campo de Login Vazio", function () {

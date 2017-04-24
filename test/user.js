@@ -1,5 +1,5 @@
 var expect = require("chai").expect;
-var User = require("../business/model/user.js")
+var User = require("../app_server/business/model/user.js")
 
 describe("User Model Test", function() {
 	describe("User Constructor Test", function() {
