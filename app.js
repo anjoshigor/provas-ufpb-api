@@ -26,7 +26,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/api/v1', users);
 app.use('/api-admin', login);
 app.use('/register', register);
 // provisório

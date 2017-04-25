@@ -17,7 +17,7 @@ router.post('/', (req, res, next) => {
 
   try {
     controller.singIn(new_user);
-    res.redirect(200,'/dashboard');
+    res.redirect('/dashboard');
   } catch (error) {
     res.render('login', { flash: { type: 'alert-danger', msg: error.message } });
   }
