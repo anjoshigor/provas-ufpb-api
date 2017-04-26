@@ -1,5 +1,3 @@
-var fs = require('fs');
-var db = require('../../infra/dao/userDAO');
 var InternalError = require('../../infra/error').InternalError;
 var RegisterError = require('../../infra/error').RegisterError;
 var User = require('../model/user');
@@ -10,6 +8,11 @@ class RegisterController {
   constructor() {
     this._controller = new UserController();
     this._validator = new RegisterValidator();
+  }
+
+//Callback function to render the view
+  getPage(req, res, next) {
+    res.render('register', { title: 'Register | API' });
   }
 
   register(user) {

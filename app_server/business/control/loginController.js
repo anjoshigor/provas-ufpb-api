@@ -13,6 +13,13 @@ class LoginController {
     this._validator = new LoginValidator();
   }
 
+//Callback function to return the view
+  getPage(req, res, next) {
+    res.render('login', { title: 'Authentication | API' });
+  }
+
+ 
+ //can't use callback function due the use of 'this.'
   singIn(user) {
     try {
       this._validator.validate(user);
