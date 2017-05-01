@@ -1,20 +1,22 @@
-/**Imports**/
 var express = require('express');
 var router = express.Router();
-var type = require('../business/control/controllerType');
-var ControllerFactory = require('../business/control/controllerFactory');
+//Importando o modelo do usuario
 var User = require('../business/model/user')
 
-/**Factory Method**/
-var ctrlLogin = ControllerFactory.getController(type.Login);
+//Importando controller do usuario
+var LoginController = require('../business/control/loginController')
 
-router.get('/', ctrlLogin.getPage);
+var controller = new LoginController();
+
+router.get('/', (req, res, next) => {
+  res.render('login', { title: 'Authentication | API' });
+});
 
 router.post('/', (req, res, next) => {
   var new_user = new User(req.body.login, req.body.password);
 
   try {
-    ctrlLogin.singIn(new_user);
+    controller.singIn(new_user);
     res.redirect('/dashboard');
   } catch (error) {
     res.render('login', { flash: { type: 'alert-danger', msg: error.message } });

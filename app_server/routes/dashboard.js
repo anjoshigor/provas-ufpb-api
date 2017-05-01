@@ -1,11 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var type = require('../business/control/controllerType');
-var ControllerFactory = require('../business/control/controllerFactory');
-//Importando o modelo do usuario
-var User = require('../business/model/user');
 
-var ctrlUser = ControllerFactory.getController(type.User);
+//Importando o modelo do usuario
+var User = require('../business/model/user')
+
+//Importando controller do usuario
+var UserController = require('../business/control/userController')
+
+var controller = new UserController();
 
 router.get('/', (req, res) => {
   res.render('dashboard/dashboard', {title: 'API | Dashboard'});
@@ -27,24 +29,25 @@ router.get('/adm/atualizar', (req, res) => {
   res.render('dashboard/adm/atualizar', {title: 'API | Dashboard - Administrador/Atualizar'});
 });
 
-router.post('/adm/adicionar', (req, res, next) => {
+router.post('/', (req, res, next) => {
   var new_user = new User(req.body.login, req.body.password);
 
   try {
-    ctrlUser.add(new_user);
-    res.render('dashboard/adm/adicionar', { flash: { type: 'alert-success', msg: 'Registro efetuado com sucesso!' } });
+    controller.add(new_user);
+    res.render('/', { flash: { type: 'alert-success', msg: 'Registro efetuado com sucesso!' } });
   } catch (error) {
-    res.render('dashboard/adm/adicionar', { flash: { type: 'alert-danger', msg: error.message } });
+    res.render('/', { flash: { type: 'alert-danger', msg: error.message } });
   }
 });
 
-router.delete('/adm/remover', (req, res, next) => {
+router.post('/', (req, res, next) => {
   var new_user = new User(req.body.login, '');
+
   try {
-    ctrlUser.delete(new_user);
-    res.render('dashboard/adm/remover', { flash: { type: 'alert-success', msg: 'Registro removido com sucesso!' } });
+    controller.delete(new_user);
+    res.render('/', { flash: { type: 'alert-success', msg: 'Registro removido com sucesso!' } });
   } catch (error) {
-    res.render('dashboard/adm/remover', { flash: { type: 'alert-danger', msg: error.message } });
+    res.render('/', { flash: { type: 'alert-danger', msg: error.message } });
   }
 });
 
