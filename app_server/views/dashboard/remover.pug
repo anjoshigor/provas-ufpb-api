@@ -1,13 +1,8 @@
-include ../header
+extends ./dashboard
 
-#page-wrapper
+block operations
   .row
     .col-lg-12
-      h1.page-header Remover
-      .panel.panel-default
-        .panel-heading
-          i.fa.fa-shield.fa-fw
-          |  Deleção 
         .panel-body
           form.form-signin(action="/register", method="delete")
             h2.form-signin-heading Insira login

@@ -14,19 +14,19 @@ router.get('/', (req, res) => {
 });
 
 router.get('/adm/adicionar', (req, res) => {
-  res.render('dashboard/adm/adicionar', {title: 'API | Dashboard - Administrador/Adicionar'});
+  res.render('dashboard/adicionar', {title: 'API | Dashboard - Administrador/Adicionar'});
 });
 
-router.get('/adm/consultar', (req, res) => {
-  res.render('dashboard/adm/consultar', {title: 'API | Dashboard - Administrador/Consultar'});
+router.get('/dm/consultar', (req, res) => {
+  res.render('dashboard/consultar', {title: 'API | Dashboard - Administrador/Consultar'});
 });
 
 router.get('/adm/remover', (req, res) => {
-  res.render('dashboard/adm/remover', {title: 'API | Dashboard - Administrador/Remover'});
+  res.render('dashboard/remover', {title: 'API | Dashboard - Administrador/Remover'});
 });
 
 router.get('/adm/atualizar', (req, res) => {
-  res.render('dashboard/adm/atualizar', {title: 'API | Dashboard - Administrador/Atualizar'});
+  res.render('dashboard/atualizar', {title: 'API | Dashboard - Administrador/Atualizar'});
 });
 
 router.post('/', (req, res, next) => {

@@ -1,17 +1,12 @@
-include ../header
+extends ./dashboard
 
-#page-wrapper
+block operations
   .row
     .col-lg-12
-      h1.page-header Adiciona
-      .panel.panel-default
-        .panel-heading
-          i.fa.fa-shield.fa-fw
-          |  Cadastro 
         .panel-body
           form.form-signin(action="/dashboard", method="post")
             h2.form-signin-heading Registre-se
             input#inputLogin.form-control(type='text', name='login', placeholder='Usuário', required='', autofocus='')
             input#inputPassword.form-control(type='password', name='password' placeholder='Senha', required='')
             button.btn.btn-lg.btn-success.btn-block.margin-top(type='submit') Registrar
-            include ../../messages
+            include ../messages
