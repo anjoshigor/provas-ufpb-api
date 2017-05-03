@@ -11,7 +11,7 @@ block content
     block operations
         .container
             .panel.panel-primary
-                .panel-heading Administrador
+                .panel-heading Administrar Usuários
                 .panel-body
                     .text-center
                         .btn-group.btn-group-lg(role='group')
@@ -19,4 +19,16 @@ block content
                             a.btn.btn-danger.btn-block(type='button', href='/dashboard/adm/remover') Remover
                             a.btn.btn-default.btn-block(type='button', href='#') Atualizar
                             a.btn.btn-default.btn-block(type='button', href='#') Consultar
-        
+            
+            .panel.panel-primary
+              .panel-heading Relatórios
+              .panel-body
+                .row
+                  .col-xs-12.col-md-6.col-md-offset-3
+                    form(method='post' action='/dashboard/report?type=txt')
+                      input(type="submit", value="Gerar Relatório em txt").btn.btn-primary.btn-block
+                .row
+                  .col-xs-12.col-md-6.col-md-offset-3
+                    form(method='post' action='/dashboard/report?type=pdf')
+                      input(type="submit", value="Gerar Relatório em PDF").btn.btn-primary.btn-block
+                                  
