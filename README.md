@@ -25,7 +25,7 @@ Abra `localhost:3000`, se a tela for renderizada no browser, tudo está funciona
 
 ## URLs funcionando até o momento
 
-### Centro
+### Centros
 
 VERBO|URL|PARÂMETRO|BODY|DESCRIÇÃO
 -----|-----|-----|------|--------
@@ -36,7 +36,7 @@ PUT| http://localhost:3000/api/v1/centro/<id\> | id |{ nome: "nome do centro" } 
 DELETE| http://localhost:3000/api/v1/centro/<id\> | id | - | Deleta o centro indicado pelo id
 
 
-### Curso
+### Cursos
 
 VERBO|URL|PARÂMETRO|BODY|DESCRIÇÃO
 -----|-----|-----|------|--------
@@ -46,3 +46,14 @@ GET| http://localhost:3000/api/v1/cursos/centro/<id\> | id | - | Traz os cursos 
 POST| http://localhost:3000/api/v1/curso/ | - |{ nome: "nome do curso", centro: "nome do centro" } | Adiciona um novo curso caso não exista com esse nome
 PUT| http://localhost:3000/api/v1/curso/<id\> | id |{ nome: "nome do curso", centro: "nome do centro" } | Atualiza o campo nome e/ou centro do curso indicado pelo id
 DELETE| http://localhost:3000/api/v1/curso/<id\> | id | - | Deleta o curso indicado pelo id
+
+
+### Disciplinas
+
+VERBO|URL|PARÂMETRO|BODY|DESCRIÇÃO
+-----|-----|-----|------|--------
+GET| http://localhost:3000/api/v1/disciplinas?nome=<nome\> | nome ou vazio | - | Traz uma disciplina ou um conjunto de disciplinas filtradas por nome
+GET| http://localhost:3000/api/v1/disciplina/<id\> | id | - | Traz uma disciplina pelo id indicado
+POST| http://localhost:3000/api/v1/disciplina/ | - |{ nome: "nome da disciplina"} | Adiciona uma nova disciplina caso não exista com esse nome
+PUT| http://localhost:3000/api/v1/disciplina/<id\> | id |{ nome: "nome da disciplina"} | Atualiza o campo nome da disciplina indicada pelo id
+DELETE| http://localhost:3000/api/v1/disciplina/<id\> | id | - | Deleta a disciplina indicada pelo id

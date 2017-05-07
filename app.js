@@ -14,6 +14,7 @@ var dashboard = require('./app_server/routes/dashboard');
 var api_index = require('./api/routes/index');
 var api_centro = require('./api/routes/centro');
 var api_curso = require('./api/routes/curso');
+var api_disciplina = require('./api/routes/disciplina');
 
 require('./api/model/db');
 
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1', api_index);
 app.use('/api/v1', api_centro);
 app.use('/api/v1', api_curso);
+app.use('/api/v1', api_disciplina);
 
 app.use('/', index);
 app.use('/api-admin', login);

@@ -12,6 +12,7 @@ mongoose.connection.on('connected', function (err){
      //está sendo chamada na conexao com mongo
     //SIGAA.getAllCentros();
     //SIGAA.getAllCursos();
+    //SIGAA.getAllDisciplinas();
 });
 
 mongoose.connection.on('error', function (err){
