@@ -3,8 +3,9 @@
 var mongoose = require('mongoose');
 
 var cursoSchema = new mongoose.Schema({
-    nome: { type: String, required: true },
+    nome: { type: String, required: true, unique: true },
     centro: { type: String, required: true}
+    //centro: {type: ObjectId(), required: true}
 });
 
-mongoose.model('Curso', cursoSchema);  
+module.exports = mongoose.model('Curso', cursoSchema);  
