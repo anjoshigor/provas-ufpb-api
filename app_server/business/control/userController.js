@@ -5,11 +5,11 @@ var InternalError = require('../../infra/error').InternalError;
 var RegisterError = require('../../infra/error').RegisterError;
 var User = require('../model/user');
 var RegisterValidator = require('../../util/registerValidator');
-var FileFactory = require('../../infra/dao/fileFactory');
+var DatabaseFactory = require('../../infra/dao/databaseFactory');
 
 class UserController {
   constructor() {
-    this._UserDAO = new UserDAO(new FileFactory().getDb());
+    this._UserDAO = new UserDAO(DatabaseFactory.getFileDB());
   }
 
   add(user) {

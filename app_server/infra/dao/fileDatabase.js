@@ -30,7 +30,6 @@ class FileDatabase extends Database {
 		//sobrescrita do arquivo
 		if (this._map.has(user.login)) {
 			throw new RegisterError('Usuário não pôde ser criado. Já existe usuário ' + user.login + ' cadastrado no sistema');
-			return;
 		}
         
 		try {
@@ -46,7 +45,6 @@ class FileDatabase extends Database {
 		//delete no arquivo
 		if (!this._map.delete(user.login)) {
 			throw new RegisterError('Usuário não pôde ser deletado. Não existe usuário ' + user.login + 'cadastrado no sistema');
-			return;
 		}
         
 		try {
@@ -60,7 +58,6 @@ class FileDatabase extends Database {
 		//pegar o usuario
 		if (!this._map.has(user.login)) {
 			throw new RegisterError('Usuário ' + user.login + ' não cadastrado no sistema');
-			return;
 		} else {
 			var password = this._map.get(user.login);
 			return new User(user.login, password);

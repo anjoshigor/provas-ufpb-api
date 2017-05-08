@@ -1,29 +1,27 @@
 var UserDAO = require('../../infra/dao/userDAO');
-var FileFactory = require('../../infra/dao/fileFactory');
+var DatabaseFactory = require('../../infra/dao/databaseFactory');
 
 class Report {
-    constructor() {
-        if (new.target === Report) {
-            throw new TypeError("Cannot construct Abstract instances directly");
-        }
+  constructor() {
+    if (new.target === Report) {
+      throw new TypeError("Cannot construct Abstract instances directly");
     }
+  }
+  
+  save(data) {
+    throw new TypeError("Cannot use Abstract methods directly! You must Override!");
+  }
 
-    save(data) {
-        throw new TypeError("Cannot use Abstract methods directly! You must Override!");
+  generate() {
+    var user = new UserDAO(DatabaseFactory.getFileDB());
+    var users = user.getUsers();
+    var data = '';
+    var path = '';
+    for (var [key, value] of users) {
+      data += key + " " +value+"\n";
     }
-
-    generate() {
-        var user = new UserDAO(new FileFactory().getDb());
-        var users = user.getUsers();
-        var data = '';
-        var path = '';
-        for (var [key, value] of users) {
-            data += key + " " +value+"\n";
-        }
-        return this.save(data);
-    }
-
-
+    return this.save(data);
+  }
 }
 
 module.exports = Report;

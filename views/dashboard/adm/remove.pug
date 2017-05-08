@@ -1,0 +1,13 @@
+#page-wrapper
+  .row
+    .col-lg-12
+      h1.page-header Remover
+      .panel.panel-default
+        .panel-heading
+          i.fa.fa-shield.fa-fw
+          |  Deleção 
+        .panel-body
+          form.form-signin(action="/dashboard", method="delete")
+            h2.form-signin-heading Insira login
+            input#inputLogin.form-control(type='text', name='login', placeholder='Usuário', required='', autofocus='')
+            button.btn.btn-lg.btn-danger.btn-block.margin-top(type='submit') Deletar
