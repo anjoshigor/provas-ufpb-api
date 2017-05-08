@@ -12,10 +12,10 @@ class UserDAO {
 		if (!instance) {
 			instance = this;
 		}
-		
+	
 		this._database = database;
 		return instance;
-		
+	
 	}
 	
 	getUsers() {

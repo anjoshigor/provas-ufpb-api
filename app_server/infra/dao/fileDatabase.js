@@ -3,6 +3,7 @@ var Database = require('./database');
 var IOError = require('../error').IOError;
 var RegisterError = require('../error').RegisterError;
 var User = require('../../business/model/user');
+var UserCaretaker = require('../../util/userCaretaker');
 
 class FileDatabase extends Database {
     
@@ -11,6 +12,8 @@ class FileDatabase extends Database {
 		this._filePath = filePath;
 		this._map = new Map();
 		this.getAll();
+		// adiciona estado inicial do banco
+		this._userCaretaker = new UserCaretaker(new Map(this._map));
 	}
     
 	getAll() {
@@ -35,6 +38,8 @@ class FileDatabase extends Database {
 		try {
 			this._map.set(user.login, user.password);
 			fs.writeFileSync(this._filePath, JSON.stringify([...this._map]));
+			// adiciona memento
+			this._userCaretaker.addUserMemento(new Map(this._map));
 		} catch (error) {
 			console.log(error);
 			throw new IOError('Falha na leitura do arquivo ' + this._filePath);
@@ -46,9 +51,11 @@ class FileDatabase extends Database {
 		if (!this._map.delete(user.login)) {
 			throw new RegisterError('Usuário não pôde ser deletado. Não existe usuário ' + user.login + 'cadastrado no sistema');
 		}
-        
+    
 		try {
 			fs.writeFileSync(this._filePath, JSON.stringify(this._map));
+			// adiciona memento
+			this._userCaretaker.addUserMemento(new Map(this._map));
 		} catch (error) {
 			throw new IOError('Falha na leitura do arquivo ' + this._filePath);
 		}
@@ -63,9 +70,17 @@ class FileDatabase extends Database {
 			return new User(user.login, password);
 		}
 	}
-    
-    
+	/**
+	 * Restaura o último estado do banco de dados
+	 */
+	restoreLastChange() {
+		this._map = this._userCaretaker.getLastSavedState();
+		
+		try {
+			fs.writeSync(this._filePath, JSON.stringify(this._map));
+		} catch(error) {
+			throw new IOError('Falha de IO no arquivo ' + this._filePath)
+		}
+	}  
 }
-
-
 module.exports = FileDatabase;

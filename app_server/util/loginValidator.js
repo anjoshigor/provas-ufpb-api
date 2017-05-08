@@ -13,8 +13,6 @@ class LoginValidator {
       throw new LoginError("Campo de Senha Vazio!");
     }
   }
-
-
 }
 
 module.exports = LoginValidator;
