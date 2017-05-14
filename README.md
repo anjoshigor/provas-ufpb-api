@@ -57,3 +57,12 @@ GET| http://localhost:3000/api/v1/disciplina/<id\> | id | - | Traz uma disciplin
 POST| http://localhost:3000/api/v1/disciplina/ | - |{ nome: "nome da disciplina"} | Adiciona uma nova disciplina caso não exista com esse nome
 PUT| http://localhost:3000/api/v1/disciplina/<id\> | id |{ nome: "nome da disciplina"} | Atualiza o campo nome da disciplina indicada pelo id
 DELETE| http://localhost:3000/api/v1/disciplina/<id\> | id | - | Deleta a disciplina indicada pelo id
+
+
+### Provas
+
+VERBO|URL|PARÂMETRO|BODY|DESCRIÇÃO
+-----|-----|-----|------|--------
+GET| http://localhost:3000/api/v1/provas | - | - | Traz um conjunto de provas que já foram classificadas e estão dentro do padrão
+GET| http://localhost:3000/api/v1/classify/prova | - | - | Traz uma prova randômica que ainda não foi classificada como dentro do padrão
+POST| http://localhost:3000/api/v1/prova/ | - |form-data { pdf: arquivo em formato pdf, periodo: 2017.1, disciplina: nome da disciplina, tipo: Normal \| Reposição \| Final, departamento: nome do departamento, centro: nome do centro, curso: nome do curso} | Adiciona uma nova prova
