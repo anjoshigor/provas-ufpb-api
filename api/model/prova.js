@@ -2,14 +2,27 @@
 var mongoose = require('mongoose');
 
 var provaSchema = new mongoose.Schema({
-    disciplina: { type: String, required: true },
-    curso: { type: String, required: true },
+    
     periodo: { type: String, required: true },
     pontos: { type: Number, default: 0 },
-    centro: { type: String, required: true },
     tipo: { type: String, required: true }, //Normal, reposição, final
-    pdf: { type: Buffer, required: true },
-    dateUploaded: { type: Date, default: new Date()}
+    dateUploaded: { type: Date, default: Date.now() },
+
+    disciplina: {
+        nome: { type: String, required: true },
+        departamento: { type: String, required: true }
+    },
+
+    curso: {
+        nome: { type: String, required: true },
+        centro: { type: String, required: true }
+    },
+
+    pdf: {
+        filename: { type: String, required: true },
+        path: { type: String, required: true },
+        size: { type: Number, required: true }
+    }
 });
 
-mongoose.model('Prova', provaSchema);  
+module.exports = mongoose.model('Prova', provaSchema);  

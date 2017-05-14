@@ -15,6 +15,7 @@ var api_index = require('./api/routes/index');
 var api_centro = require('./api/routes/centro');
 var api_curso = require('./api/routes/curso');
 var api_disciplina = require('./api/routes/disciplina');
+var api_prova = require('./api/routes/prova');
 
 require('./api/model/db');
 
@@ -37,6 +38,8 @@ app.use('/api/v1', api_index);
 app.use('/api/v1', api_centro);
 app.use('/api/v1', api_curso);
 app.use('/api/v1', api_disciplina);
+app.use('/api/v1', api_prova);
+
 
 app.use('/', index);
 app.use('/api-admin', login);
