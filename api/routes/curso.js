@@ -4,6 +4,10 @@ var router = express.Router();
 var Curso = require('../model/curso');
 var Centro = require('../model/centro');
 
+var Factory = require('../business/ORMFactory');
+var APIManager = require('../business/APIManager');
+var CursoCmd = require('../business/CursoCmd');
+
 /**Get cursos**/
 router.get('/cursos', (req, res, next) => {
     var query = req.query;
@@ -96,17 +100,9 @@ router.get('/cursos/centro/:id', (req, res, next) => {
 /**ADD curso**/
 router.post('/curso', (req, res, next) => {
 
-    var newCurso = new Curso(req.body);
-    console.log(req.body);
+    var apimanager = new APIManager();
+    apimanager.add(req.body, res, new CursoCmd(Factory.getCursoMongoORM()));
 
-    newCurso.save((err, createdCurso) => {
-        if (err) {
-            console.log(err);
-            res.send("Erro interno do servidor");
-        }
-        res.send(createdCurso);
-
-    });
 });
 
 /**UPDATE curso pelo id**/
