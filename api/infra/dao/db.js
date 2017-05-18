@@ -1,6 +1,6 @@
 /**Configuração padrão de conexão**/
 var mongoose = require('mongoose');
-var SIGAA = require('../util/sigaa');
+var APIManager = require('../../business/control/apiManager');
 
 var dbURI = 'mongodb://localhost/provas-api';
 
@@ -8,11 +8,7 @@ mongoose.connect(dbURI);
 
 mongoose.connection.on('connected', function (err) {
     console.log('\nMongoose connected to ' + dbURI);
-
-    //está sendo chamada na conexao com mongo
-    //SIGAA.getAllCentros();
-    //SIGAA.getAllCursos();
-    //SIGAA.getAllDisciplinas();
+    new APIManager().initialize();
 });
 
 mongoose.connection.on('error', function (err) {

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var Disciplina = require('../model/disciplina');
+var Disciplina = require('../business/schemes/disciplinaScheme');
 
 /**Get disciplina**/
 router.get('/disciplinas', (req, res, next) => {

@@ -17,7 +17,7 @@ var api_curso = require('./api/routes/curso');
 var api_disciplina = require('./api/routes/disciplina');
 var api_prova = require('./api/routes/prova');
 
-require('./api/model/db');
+require('./api/infra/dao/db');
 
 var app = express();
 

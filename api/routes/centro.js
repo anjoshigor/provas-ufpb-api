@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-var Centro = require('../model/centro');
+var Centro = require('../business/schemes/centroScheme');
 
 /**Get centros**/
 router.get('/centros', (req, res, next) => {

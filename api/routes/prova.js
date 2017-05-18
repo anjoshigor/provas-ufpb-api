@@ -1,7 +1,7 @@
 var express = require('express');
 var multer = require('multer');
 var router = express.Router();
-var Prova = require('../model/prova');
+var Prova = require('../business/schemes/provaScheme');
 
 
 /*** MULTER CONFIG **/
