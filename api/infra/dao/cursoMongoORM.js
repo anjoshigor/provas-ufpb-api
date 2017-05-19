@@ -1,14 +1,14 @@
-var CursoSchema = require('../../business/schemes/cursoScheme');
+var CursoSchema = require('../../business/schemas/cursoSchema');
 
 class CursoMongoORM {
   constructor() {
-    this._cursoScheme = null;
+    this._cursoSchema = null;
   }
   
-  add(curso, res) {
-    this._cursoScheme = new CursoSchema(curso);
+  add(req, res) {
+    this._cursoSchema = new CursoSchema(req.body);
         
-    this._cursoScheme.save((err, createdCurso) => {
+    this._cursoSchema.save((err, createdCurso) => {
       if (err) {
         res.status(500).send("Erro interno do servidor!");
       }

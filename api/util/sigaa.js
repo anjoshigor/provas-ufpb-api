@@ -1,7 +1,7 @@
 var fetch = require('node-fetch');
-var Curso = require('../business/schemes/cursoScheme');
-var Centro = require('../business/schemes/centroScheme');
-var Disciplina = require('../business/schemes/disciplinaScheme');
+var Curso = require('../business/schemas/cursoSchema');
+var Centro = require('../business/schemas/centroSchema');
+var Disciplina = require('../business/schemas/disciplinaSchema');
 
 /** Class to communicate with sigaa api from: cursos-ufpb.herokuapp.com**/
 class Sigaa {

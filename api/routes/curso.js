@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-var Curso = require('../business/schemes/cursoScheme');
-var Centro = require('../business/schemes/centroScheme');
+var Curso = require('../business/schemas/cursoSchema');
+var Centro = require('../business/schemas/centroSchema');
 
 var Factory = require('../util/ormFactory');
 var APIManager = require('../business/control/apiManager');
@@ -72,7 +72,7 @@ router.get('/cursos/centro/:id', (req, res, next) => {
 
 /**ADD curso**/
 router.post('/curso', (req, res, next) => {
-    new APIManager().add(req.body, res, new CursoCommand(Factory.getCursoMongoORM()));
+    new APIManager().add(req, res, new CursoCommand(Factory.getCursoMongoORM()));
 });
 
 /**UPDATE curso pelo id**/

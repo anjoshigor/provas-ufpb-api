@@ -1,7 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-var Centro = require('../business/schemes/centroScheme');
+var Centro = require('../business/schemas/centroSchema');
+
+var Factory = require('../util/ormFactory');
+var APIManager = require('../business/control/apiManager');
+var CentroCommand = require('../business/control/centroCommand');
 
 /**Get centros**/
 router.get('/centros', (req, res, next) => {
@@ -29,82 +33,24 @@ router.get('/centros', (req, res, next) => {
 
 /** Get by id**/
 router.get('/centro/:id', (req, res, next) => {
-    var id = req.params.id;
-    console.log(id);
-    Centro.findById(id, '-__v', (err, centro) => {
-        if (err) {
-            console.log(err);
-            res.send("Erro interno do servidor");
-        }
-        if (centro) {
-            res.send(centro);
-        } else {
-            res.send("Centro não encontrado");
-        }
-    });
+    new APIManager().get(req, res, Factory.getCentroMongoORM());
 });
 
 
 /**ADD centro**/
 router.post('/centro', (req, res, next) => {
-
-    var newCentro = new Centro(req.body);
-    console.log(req.body);
-
-    newCentro.save((err, createdCentro) => {
-        if (err) {
-            console.log(err);
-            res.send("Erro interno do servidor");
-        }
-        res.send(createdCentro);
-
-    });
+    new APIManager().add(req, res, Factory.getCentroMongoORM());
 });
 
 /**UPDATE centro pelo id**/
 router.put('/centro/:id', (req, res, next) => {
-
-    var id = req.params.id;
-    
-    console.log("ID: "+id);
-
-    Centro.findById(id, function (err, centro) {
-        if (err) {
-            res.status(500).send("Erro interno do servidor");
-            console.log(err);
-        } else {
-            //se não passar o nome, mantém o existente
-            centro.nome = req.body.nome || centro.nome;
-            centro.save(function (err, centro) {
-                if (err) {
-                    res.status(500).send("Erro interno do Servidor");
-                    console.log(err);
-                }
-                res.send(centro);
-            });
-        }
-    });
+    new APIManager().add(req, res, Factory.getCentroMongoORM());
 });
 
 
 /**Deletar pelo id**/
 router.delete('/centro/:id', (req, res, next) => {
-
-    var id = req.params.id;
-
-    Centro.findByIdAndRemove(id, function (err, centro) {
-        var response = {
-            message: "Centro deletado com sucesso",
-            nome: centro.nome,
-            id: centro._id
-        };
-
-        if (err) {
-            console.log(err);
-            res.status(500).send("Erro interno do servidor");
-        }
-        res.send(response);
-    });
+    new APIManager().delete(req, res, Factory.getCentroMongoORM());
 });
 
 
