@@ -130,13 +130,28 @@ router.get('/classify/prova', (req, res, next) => {
             res.status(500).send("Erro interno no servidor");
         } else {
 
-            var chosen =Math.floor(Math.random() * provas.length) + 0;  
-
+            var chosen = Math.floor(Math.random() * provas.length)
             res.send(provas[chosen]);
         }
     }).where('pontos').lt(3);
 
 });
+
+/**Get download prova pra classificar**/
+router.get('/download/prova/:id', (req, res, next) => {
+    var id = req.params.id;
+
+    Prova.findById(id, (err, prova) => {
+        if (err) {
+            console.log(err.message);
+            res.status(500).send("Erro interno no servidor");
+        } else {
+            res.download(prova.pdf.path);
+        }
+    }).where('pontos').lt(3);
+
+});
+
 
 
 module.exports = router;
