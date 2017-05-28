@@ -70,3 +70,4 @@ GET| http://localhost:3000/api/v1/download/prova/:id | id |- | Faz o download de
 POST| http://localhost:3000/api/v1/prova/ | - |form-data { pdf: arquivo em formato pdf, periodo: 2017.1, disciplina: nome da disciplina, tipo: Normal \| Reposição \| Final, departamento: nome do departamento, centro: nome do centro, curso: nome do curso} | Adiciona uma nova prova
 PUT| http://localhost:3000/api/v1/classify/:id/add | id |- | Adiciona um ponto na classificacao da prova com id informado
 PUT| http://localhost:3000/api/v1/classify/:id/sub | id |- | Subtrai um ponto na classificacao da prova com id informado
+DELETE| http://localhost:3000/api/v1/prova/:id | id |- | Remove a prova com id informado

@@ -2,6 +2,9 @@ var express = require('express');
 var multer = require('multer');
 var router = express.Router();
 var Prova = require('../business/schemas/provaSchema');
+var Factory = require('../util/ormFactory');
+var APIManager = require('../business/control/apiManager');
+var ProvaCommand = require('../business/control/provaCommand');
 
 
 /*** MULTER CONFIG **/
@@ -104,7 +107,6 @@ router.put('/classify/:id/add', (req, res, next) => {
     });
 
 });
-
 
 /**ADD -1 ponto**/
 router.put('/classify/:id/sub', (req, res, next) => {
@@ -234,5 +236,8 @@ router.get('/download/prova/classify/:id', (req, res, next) => {
 
 });
 
+router.delete('/prova/:id', (req, res, next) => {
+  new APIManager().delete(req, res, Factory.getProvaMongoORM());
+});
 
 module.exports = router;
