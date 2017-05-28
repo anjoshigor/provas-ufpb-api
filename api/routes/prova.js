@@ -85,12 +85,12 @@ router.put('/classify/:id/add', (req, res, next) => {
     var query = Prova.findById(id);
     query.where('pontos').lt(3);
 
-    query.exec( (err, prova) => {
+    query.exec((err, prova) => {
         if (err) {
             console.log(err.message);
             res.status(500).send("Erro interno no servidor");
-        } 
-        if (prova === null){
+        }
+        if (prova === null) {
             res.status(401).send("Prova não encontrada");
         }
         else {
@@ -136,6 +136,13 @@ router.put('/classify/:id/sub', (req, res, next) => {
         }
     });
 
+});
+
+
+router.put('/prova/:id', (req, res, next) => {
+    upload(req, res, (err) => {
+        new APIManager().update(req, res, Factory.getProvaMongoORM());
+    });
 });
 
 /**Get provas **/
@@ -237,7 +244,7 @@ router.get('/download/prova/classify/:id', (req, res, next) => {
 });
 
 router.delete('/prova/:id', (req, res, next) => {
-  new APIManager().delete(req, res, Factory.getProvaMongoORM());
+    new APIManager().delete(req, res, Factory.getProvaMongoORM());
 });
 
 module.exports = router;
