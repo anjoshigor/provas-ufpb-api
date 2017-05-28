@@ -5,15 +5,6 @@ var Prova = require('../business/schemas/provaSchema');
 
 
 /*** MULTER CONFIG **/
-var storageLimbo = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/ufpb/limbo')
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '.pdf');
-    }
-})
-
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/ufpb/repository')
@@ -22,7 +13,6 @@ var storage = multer.diskStorage({
         cb(null, Date.now() + '.pdf');
     }
 })
-
 
 var filter = (req, file, cb) => {
     if (file.mimetype !== 'application/pdf') {
@@ -34,10 +24,9 @@ var filter = (req, file, cb) => {
     }
 }
 
-var upload = multer({ storage: storageLimbo, fileFilter: filter }).single('pdf');
+var upload = multer({ storage: storage, fileFilter: filter }).single('pdf');
 
 /***MULTER CONFIG***/
-
 
 /**ADD prova**/
 router.post('/prova', (req, res, next) => {
@@ -86,7 +75,68 @@ router.post('/prova', (req, res, next) => {
 });
 
 
-/**Get provas classificadas**/
+/**ADD +1 ponto**/
+router.put('/classify/:id/add', (req, res, next) => {
+    var id = req.params.id;
+
+    var query = Prova.findById(id);
+    query.where('pontos').lt(3);
+
+    query.exec( (err, prova) => {
+        if (err) {
+            console.log(err.message);
+            res.status(500).send("Erro interno no servidor");
+        } 
+        if (prova === null){
+            res.status(401).send("Prova não encontrada");
+        }
+        else {
+            prova.pontos++;
+            prova.save((err, prova) => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).send("Erro interno do servidor");
+                }
+
+                res.send(prova);
+            });
+        }
+    });
+
+});
+
+
+/**ADD -1 ponto**/
+router.put('/classify/:id/sub', (req, res, next) => {
+    var id = req.params.id;
+
+    var query = Prova.findById(id);
+    query.where('pontos').lt(3);
+    query.exec((err, prova) => {
+
+        if (err) {
+            console.log(err.message);
+            res.status(500).send("Erro interno no servidor");
+        }
+
+        if (prova === null) {
+            res.status(401).send("Prova não encontrada");
+
+        } else {
+            prova.pontos--;
+            prova.save((err, prova) => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).send("Erro interno do servidor");
+                }
+                res.send(prova);
+            });
+        }
+    });
+
+});
+
+/**Get provas **/
 router.get('/provas', (req, res, next) => {
     var query = req.query;
     var filter = {};
@@ -107,7 +157,7 @@ router.get('/provas', (req, res, next) => {
 
     }
 
-    Prova.find(filter, '-__v', (err, provas) => {
+    Prova.find(filter, '-__v -pontos -pdf', (err, provas) => {
         if (err) {
             console.log(err.message);
             res.status(500).send("Erro interno no servidor");
@@ -118,13 +168,28 @@ router.get('/provas', (req, res, next) => {
 
 });
 
+/**Get download prova**/
+router.get('/download/prova/:id', (req, res, next) => {
+    var id = req.params.id;
 
-/**Get uma prova pra classificar**/
+    Prova.findById(id, (err, prova) => {
+        if (err) {
+            console.log(err.message);
+            res.status(500).send("Erro interno no servidor");
+        } else {
+            res.download(prova.pdf.path);
+        }
+    }).where('pontos').gt(2);
+
+});
+
+
+/**Get uma prova aleatoria pra classificar**/
 router.get('/classify/prova', (req, res, next) => {
     var query = req.query;
     var filter = {};
 
-    Prova.find(filter, '-__v', (err, provas) => {
+    Prova.find(filter, '-__v -pdf', (err, provas) => {
         if (err) {
             console.log(err.message);
             res.status(500).send("Erro interno no servidor");
@@ -137,8 +202,25 @@ router.get('/classify/prova', (req, res, next) => {
 
 });
 
+/**Get provas pra classificar**/
+router.get('/classify/provas', (req, res, next) => {
+    var query = req.query;
+    var filter = {};
+
+    Prova.find(filter, '-__v -pdf', (err, provas) => {
+        if (err) {
+            console.log(err.message);
+            res.status(500).send("Erro interno no servidor");
+        } else {
+            res.send(provas);
+        }
+    }).where('pontos').lt(3);
+
+});
+
+
 /**Get download prova pra classificar**/
-router.get('/download/prova/:id', (req, res, next) => {
+router.get('/download/prova/classify/:id', (req, res, next) => {
     var id = req.params.id;
 
     Prova.findById(id, (err, prova) => {
@@ -151,7 +233,6 @@ router.get('/download/prova/:id', (req, res, next) => {
     }).where('pontos').lt(3);
 
 });
-
 
 
 module.exports = router;
