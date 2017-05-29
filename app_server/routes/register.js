@@ -19,7 +19,7 @@ router.post('/', (req, res, next) => {
     controller.register(new_user);
     res.render('register', { flash: { type: 'alert-success', msg: 'Registro efetuado com sucesso!' } });
   } catch (error) {
-    res.render('/', { flash: { type: 'alert-danger', msg: error.message } });
+    res.render('register', { flash: { type: 'alert-danger', msg: error.message } });
   }
 
 });
