@@ -5,7 +5,7 @@ var Prova = require('../business/schemas/provaSchema');
 var Factory = require('../util/ormFactory');
 var APIManager = require('../business/control/apiManager');
 var ProvaCommand = require('../business/control/provaCommand');
-
+var fs = require('fs');
 
 /*** MULTER CONFIG **/
 var storage = multer.diskStorage({
@@ -138,7 +138,7 @@ router.put('/classify/:id/sub', (req, res, next) => {
 
 });
 
-
+/**UPDATE prova*/
 router.put('/prova/:id', (req, res, next) => {
     upload(req, res, (err) => {
         new APIManager().update(req, res, Factory.getProvaMongoORM());
@@ -186,7 +186,21 @@ router.get('/download/prova/:id', (req, res, next) => {
             console.log(err.message);
             res.status(500).send("Erro interno no servidor");
         } else {
-            res.download(prova.pdf.path);
+            fs.stat(prova.pdf.path, (err, stat) => {
+                if (err == null) {
+                    res.download(prova.pdf.path);
+                } else if (err.code == 'ENOENT') {
+                    Prova.findByIdAndRemove(id, (err, prova) => {
+                        if (err) {
+                            console.log(err);
+                            res.status(500).send("Erro interno do servidor");
+                        }
+                        res.status(401).send("Prova não encontrada");
+                    });
+                } else {
+                    res.status(500).send("Erro interno no servidor");
+                }
+            });
         }
     }).where('pontos').gt(2);
 
@@ -227,20 +241,36 @@ router.get('/classify/provas', (req, res, next) => {
 
 });
 
-
 /**Get download prova pra classificar**/
 router.get('/download/prova/classify/:id', (req, res, next) => {
     var id = req.params.id;
-
-    Prova.findById(id, (err, prova) => {
+    var query = Prova.findById(id);
+    query.where('pontos').lt(3);
+    query.exec((err, prova) => {
         if (err) {
             console.log(err.message);
             res.status(500).send("Erro interno no servidor");
-        } else {
-            res.download(prova.pdf.path);
         }
-    }).where('pontos').lt(3);
-
+        if (prova === null) {
+            res.status(401).send("Prova não encontrada");
+        } else {
+            fs.stat(prova.pdf.path, (err, stat) => {
+                if (err == null) {
+                    res.download(prova.pdf.path);
+                } else if (err.code == 'ENOENT') {
+                    Prova.findByIdAndRemove(id, (err, prova) => {
+                        if (err) {
+                            console.log(err);
+                            res.status(500).send("Erro interno do servidor");
+                        }
+                        res.status(401).send("Prova não encontrada");
+                    });
+                } else {
+                    res.status(500).send("Erro interno no servidor");
+                }
+            });
+        }
+    });
 });
 
 router.delete('/prova/:id', (req, res, next) => {
