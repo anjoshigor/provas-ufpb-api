@@ -7,7 +7,32 @@ var Factory = require('../util/ormFactory');
 var APIManager = require('../business/control/apiManager');
 var CentroCommand = require('../business/control/centroCommand');
 
-/**Get centros**/
+/**
+ * @api {get} /centros/ Retorna todos os centros
+ * @apiName GetCentros
+ * @apiGroup Centros
+ *
+ * @apiSuccess {Centro[]} Centro Lista de Centros.
+ * @apiSuccessExample {json} Exemplo de corpo de resposta com sucesso
+ [
+  {
+    "_id": "590e6e53e08bc1524ddb0a63",
+    "nome": "CENTRO DE INFORMÁTICA (CI) (11.00.64)"
+  },
+  {
+    "_id": "590e6e53e08bc1524ddb0a66",
+    "nome": "CENTRO DE CIÊNCIAS SOCIAIS E APLICADAS (CCSA) (11.00.52)"
+  },
+  {
+    "_id": "590e6e53e08bc1524ddb0a67",
+    "nome": "CENTRO DE CIÊNCIAS MÉDICAS (CCM) (11.00.60)"
+  },
+  {
+    "_id": "590e6e53e08bc1524ddb0a68",
+    "nome": "CENTRO DE CIÊNCIAS JURÍDICAS (CCJ) (11.00.57)"
+  }
+]
+ */
 router.get('/centros', (req, res, next) => {
     var nome = req.query.nome;
     var filter = {};
@@ -31,7 +56,7 @@ router.get('/centros', (req, res, next) => {
     });
 });
 
-/** Get by id**/
+
 router.get('/centro/:id', (req, res, next) => {
     new APIManager().get(req, res, Factory.getCentroMongoORM());
 });
