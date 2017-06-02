@@ -2,6 +2,10 @@
   "name": "provas-ufpb-api",
   "version": "0.0.0",
   "private": true,
+  "apidoc": {
+    "title": "Api de provas da UFPB",
+    "url" : "http://localhost:3000/api/v1"
+  },
   "scripts": {
     "start": "node ./bin/www",
     "test": "./node_modules/.bin/mocha --reporter spec"

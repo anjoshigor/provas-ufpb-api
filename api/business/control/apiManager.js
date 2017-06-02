@@ -1,7 +1,7 @@
 var SIGAA = require('../../util/sigaa');
 
 class APIManager {
-  constructor() {}
+  constructor() { }
 
   initialize() {
     //está sendo chamada na conexao com mongo
@@ -14,6 +14,9 @@ class APIManager {
     cmd.get(req, res);
   }
 
+  getById(req, res, cmd) {
+    cmd.getById(req, res);
+  }
   add(req, res, cmd) {
     cmd.add(req, res);
   }
