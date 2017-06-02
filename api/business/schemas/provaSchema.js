@@ -8,10 +8,7 @@ var provaSchema = new mongoose.Schema({
     tipo: { type: String, required: true }, //Normal, reposição, final
     dateUploaded: { type: Date, default: Date.now() },
 
-    disciplina: {
-        nome: { type: String, required: true },
-        departamento: { type: String, required: true }
-    },
+    disciplina: { type: String, required: true },
 
     curso: {
         nome: { type: String, required: true },

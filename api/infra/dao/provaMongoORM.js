@@ -40,26 +40,34 @@ class ProvaMongoORM {
     update(req, res) {
         var id = req.params.id;
 
-        console.log("ID: " + id);
-
         ProvaSchema.findById(id, function (err, prova) {
             if (err) {
                 res.status(500).send("Erro interno do servidor");
                 console.log(err);
             } else {
 
-                if (prova.pdf.path !== null)
-                    fs.unlinkSync(prova.pdf.path);
+                //test pdf file
+                if (req.file !== undefined) {
+
+                    try {
+                        fs.unlinkSync(prova.pdf.path);
+                    } catch (err) {
+                        if (err.code !== 'ENOENT'){
+                            console.log(err);
+                            throw (err);
+                        }
+                    }
+
+                    prova.pdf.filename = req.file.filename || prova.pdf.filename;
+                    prova.pdf.path = req.file.path || prova.pdf.path;
+                    prova.pdf.size = req.file.size || prova.pdf.size;
+                }
 
                 prova.tipo = req.body.tipo || prova.tipo;
                 prova.periodo = req.body.periodo || prova.periodo;
-                prova.disciplina.nome = req.body.disciplina || prova.disciplina.nome;
-                prova.disciplina.departamento = req.body.departamento || prova.disciplina.departamento;
+                prova.disciplina = req.body.disciplina || prova.disciplina;
                 prova.curso.nome = req.body.curso || prova.curso.nome;
                 prova.curso.centro = req.body.centro || prova.curso.centro;
-                prova.pdf.filename = req.file.filename || prova.pdf.filename;
-                prova.pdf.path = req.file.path || prova.pdf.path;
-                prova.pdf.size = req.file.size || prova.pdf.size;
 
                 prova.save(function (err, prova) {
                     if (err) {
