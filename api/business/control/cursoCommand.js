@@ -2,9 +2,13 @@ class CursoCommand {
   constructor(orm) {
     this._cursoOrm = orm;
   }
-  
+
   get(req, res) {
     this._cursoOrm.get(req, res);
+  }
+
+  getById(req, res) {
+    this._cursoOrm.getById(req, res);
   }
 
   add(req, res) {

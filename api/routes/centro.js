@@ -115,7 +115,7 @@ router.get('/centro/:id', (req, res, next) => {
 	"nome":"CENTRO DE INFORMÁTICA (CI) (11.00.64)"
     }
  * @apiSampleRequest http://localhost:3000/api/v1/centro/
- * @apiSuccess {Centro} Centro Centro requisitado
+ * @apiSuccess {Centro} Centro Centro adicionado
  * @apiSuccessExample {json} Exemplo de corpo de resposta com sucesso
  {
   "message": "Centro adicionado com sucesso",
@@ -139,7 +139,7 @@ router.post('/centro', (req, res, next) => {
 });
 
 /**
- * @api {put} /centro/ UPDATE Centro pelo id
+ * @api {put} /centro/:id UPDATE Centro pelo id
  * @apiName UPDATECentro
  * @apiGroup Centros
  * @apiParam {Number} id Identificador do Centro
@@ -151,7 +151,7 @@ router.post('/centro', (req, res, next) => {
 	"nome": "CENTRO DE INFORMÁTICA (CI) (11.00.64)"
     }
  * @apiSampleRequest http://localhost:3000/api/v1/centro/5930c904104d5851085c0d6a
- * @apiSuccess {Centro} Centro Centro requisitado
+ * @apiSuccess {Centro} Centro Centro modificado
  * @apiSuccessExample {json} Exemplo de corpo de resposta com sucesso
   {
   "message": "Centro alterado com sucesso",
@@ -177,7 +177,7 @@ router.put('/centro/:id', (req, res, next) => {
 
 
 /**
- * @api {delete} /centro/:id DEL Centro pelo id
+ * @api {delete} /centro/:id DELETE Centro pelo id
  * @apiName DELCentro
  * @apiGroup Centros
  * @apiParam {Number} id Identificador do Centro

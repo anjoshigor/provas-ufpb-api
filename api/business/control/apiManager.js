@@ -1,5 +1,5 @@
 var SIGAA = require('../../util/sigaa');
-
+//TODO: tratar todas as exceções
 class APIManager {
   constructor() { }
 
