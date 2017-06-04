@@ -92,10 +92,13 @@ router.get('/cursos', (req, res, next) => {
  * @apiError {404} CursoNaoEncontrado Curso não foi encontrado
  * @apiErrorExample {json} Exemplo de erro
  {
+  "message": "Curso não encontrado",
   "parametros": {
     "id": "590e6aa53e08bc1524ddba63"
-  },
-  "message": "Curso não encontrado"
+  
+
+  }
+ }
 */
 
 router.get('/curso/:id', (req, res, next) => {
@@ -111,8 +114,8 @@ router.get('/curso/:id', (req, res, next) => {
  * @apiParam {Number} id Identificador do centro
  * @apiDescription Retorna todos os cursos de um centro especificado pelo id
  * @apiExample {HTTP} Exemplo de uso
-    GET /api/v1/curso/centro/590e6e53e08bc1524ddb0a63 HTTP/1.1
- * @apiSampleRequest http://localhost:3000/api/v1/curso/centro/590e6e53e08bc1524ddb0a63
+    GET /api/v1/cursos/centro/590e6e53e08bc1524ddb0a63 HTTP/1.1
+ * @apiSampleRequest http://localhost:3000/api/v1/cursos/centro/590e6e53e08bc1524ddb0a63
  * @apiSuccess {Cursos[]} Curso Cursos requisitados
  * @apiSuccessExample {json} Exemplo de corpo de resposta com sucesso
  [
@@ -135,17 +138,19 @@ router.get('/curso/:id', (req, res, next) => {
  * @apiError {404} CursoNaoEncontrado Curso não foi encontrado
  * @apiErrorExample {json} Exemplo de erro
  {
+  "message": "Curso não encontrado",
   "parametros": {
     "id": "590e6aa53e08bc1524ddba63"
-  },
-  "message": "Curso não encontrado"
+  }
+ }
  * @apiError {404} CentroNaoEncontrado Centro não foi encontrado
  * @apiErrorExample {json} Exemplo de erro
  {
+  "message": "Centro não encontrado",
   "parametros": {
     "id": "590e6aa53e08bc1524ddba63"
-  },
-  "message": "Centro não encontrado"
+  }
+ } 
 */
 router.get('/cursos/centro/:id', (req, res, next) => {
     var centroId = req.params.id;

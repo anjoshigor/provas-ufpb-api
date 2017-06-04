@@ -610,7 +610,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Exemplo de erro",
-          "content": "{\n \"parametros\": {\n   \"id\": \"590e6aa53e08bc1524ddba63\"\n },\n \"message\": \"Curso não encontrado\"",
+          "content": "{\n \"message\": \"Curso não encontrado\",\n \"parametros\": {\n   \"id\": \"590e6aa53e08bc1524ddba63\"\n \n\n }\n}",
           "type": "json"
         }
       ]
@@ -728,13 +728,13 @@ define({ "api": [
     "examples": [
       {
         "title": "Exemplo de uso",
-        "content": "GET /api/v1/curso/centro/590e6e53e08bc1524ddb0a63 HTTP/1.1",
+        "content": "GET /api/v1/cursos/centro/590e6e53e08bc1524ddb0a63 HTTP/1.1",
         "type": "HTTP"
       }
     ],
     "sampleRequest": [
       {
-        "url": "http://localhost:3000/api/v1/curso/centro/590e6e53e08bc1524ddb0a63"
+        "url": "http://localhost:3000/api/v1/cursos/centro/590e6e53e08bc1524ddb0a63"
       }
     ],
     "success": {
@@ -779,12 +779,12 @@ define({ "api": [
       "examples": [
         {
           "title": "Exemplo de erro",
-          "content": "{\n \"parametros\": {\n   \"id\": \"590e6aa53e08bc1524ddba63\"\n },\n \"message\": \"Curso não encontrado\"",
+          "content": "{\n \"message\": \"Curso não encontrado\",\n \"parametros\": {\n   \"id\": \"590e6aa53e08bc1524ddba63\"\n }\n}",
           "type": "json"
         },
         {
           "title": "Exemplo de erro",
-          "content": "{\n \"parametros\": {\n   \"id\": \"590e6aa53e08bc1524ddba63\"\n },\n \"message\": \"Centro não encontrado\"",
+          "content": "{\n \"message\": \"Centro não encontrado\",\n \"parametros\": {\n   \"id\": \"590e6aa53e08bc1524ddba63\"\n }\n}",
           "type": "json"
         }
       ]
@@ -1244,7 +1244,7 @@ define({ "api": [
             "group": "Error 4xx",
             "type": "409",
             "optional": false,
-            "field": "Disciplinaexistente",
+            "field": "DisciplinaExistente",
             "description": "<p>Disciplina já existe</p>"
           }
         ]
@@ -1265,5 +1265,383 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "api/routes/disciplina.js",
     "groupTitle": "Disciplinas"
+  },
+  {
+    "type": "get",
+    "url": "/provas/latest",
+    "title": "GET Últimas provas adicionadas",
+    "name": "GetLatestProvas",
+    "group": "Provas",
+    "description": "<p>Retorna as últimas 10 provas adicionadas que estão dentro do padrão e já foram avaliadas</p>",
+    "examples": [
+      {
+        "title": "Exemplo de uso",
+        "content": "GET /api/v1/provas/latest HTTP/1.1",
+        "type": "HTTP"
+      }
+    ],
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3000/api/v1/provas/latest"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Prova[]",
+            "optional": false,
+            "field": "Prova",
+            "description": "<p>Lista de Provas.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de corpo de resposta com sucesso",
+          "content": "[\n {\n   \"_id\": \"5930aaf6d817660e45dfb8eb\",\n   \"periodo\": \"2005.2\",\n   \"tipo\": \"Normal\",\n   \"disciplina\": \"BANCO DE DADOS\",\n   \"curso\": {\n     \"nome\": \"CIÊNCIAS DA COMPUTAÇÃO - João Pessoa - Presencial - MT - BACHARELADO\",\n     \"centro\": \"CENTRO DE INFORMÁTICA (CI) (11.00.64)\"\n   },\n   \"dateUploaded\": \"2017-06-02T00:01:58.950Z\"\n }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "404",
+            "optional": false,
+            "field": "ProvaNaoEncontrada",
+            "description": "<p>Prova não foi encontrada</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de erro",
+          "content": "{\n \"message\": \"Provas não encontradas\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "api/routes/prova.js",
+    "groupTitle": "Provas"
+  },
+  {
+    "type": "get",
+    "url": "/prova/:id",
+    "title": "GET Prova pelo id",
+    "name": "GetProvaById",
+    "group": "Provas",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Identificador da prova</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Retorna a prova especificada pelo id</p>",
+    "examples": [
+      {
+        "title": "Exemplo de uso",
+        "content": "GET /api/v1/prova/590e6e53e08bc1524ddb0a63 HTTP/1.1",
+        "type": "HTTP"
+      }
+    ],
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3000/api/v1/prova/590e6e53e08bc1524ddb0a63"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Prova",
+            "optional": false,
+            "field": "Prova",
+            "description": "<p>Prova requisitada</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de corpo de resposta com sucesso",
+          "content": "{\n \"_id\": \"5930aaf6d817660e45dfb8eb\",\n \"periodo\": \"2005.2\",\n \"tipo\": \"Normal\",\n \"disciplina\": \"BANCO DE DADOS\",\n \"curso\": {\n   \"nome\": \"CIÊNCIAS DA COMPUTAÇÃO - João Pessoa - Presencial - MT - BACHARELADO\",\n   \"centro\": \"CENTRO DE INFORMÁTICA (CI) (11.00.64)\"\n },\n \"dateUploaded\": \"2017-06-02T00:01:58.950Z\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "404",
+            "optional": false,
+            "field": "ProvaNaoEncontrada",
+            "description": "<p>Prova não foi encontrada</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de erro",
+          "content": "{\n \"message\": \"Prova não encontrada\",\n \"parametros\": {\n   \"id\": \"5930aaf6d817660e45dfb8e4\"\n }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "api/routes/prova.js",
+    "groupTitle": "Provas"
+  },
+  {
+    "type": "get",
+    "url": "/provas/",
+    "title": "GET Todas as Provas",
+    "name": "GetProvas",
+    "group": "Provas",
+    "description": "<p>Retorna todas as provas cadastradas na base de dados que estão dentro do padrão e já foram avaliadas</p>",
+    "examples": [
+      {
+        "title": "Exemplo de uso",
+        "content": "GET /api/v1/provas HTTP/1.1",
+        "type": "HTTP"
+      }
+    ],
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3000/api/v1/provas"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Prova[]",
+            "optional": false,
+            "field": "Prova",
+            "description": "<p>Lista de Provas.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de corpo de resposta com sucesso",
+          "content": "[\n {\n   \"_id\": \"5930aaf6d817660e45dfb8eb\",\n   \"periodo\": \"2005.2\",\n   \"tipo\": \"Normal\",\n   \"disciplina\": \"BANCO DE DADOS\",\n   \"curso\": {\n     \"nome\": \"CIÊNCIAS DA COMPUTAÇÃO - João Pessoa - Presencial - MT - BACHARELADO\",\n     \"centro\": \"CENTRO DE INFORMÁTICA (CI) (11.00.64)\"\n   },\n   \"dateUploaded\": \"2017-06-02T00:01:58.950Z\"\n }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "404",
+            "optional": false,
+            "field": "ProvaNaoEncontrada",
+            "description": "<p>Prova não foi encontrada</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de erro",
+          "content": "{\n \"message\": \"Prova não encontrada\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "api/routes/prova.js",
+    "groupTitle": "Provas"
+  },
+  {
+    "type": "get",
+    "url": "/provas/curso/:id",
+    "title": "GET todas as provas de um Curso",
+    "name": "GetProvasByCurso",
+    "group": "Provas",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Identificador do curso</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Retorna todas as provas de um curso especificado pelo id</p>",
+    "examples": [
+      {
+        "title": "Exemplo de uso",
+        "content": "GET /api/v1/provas/curso/590e6e53e08bc1524ddb0a63 HTTP/1.1",
+        "type": "HTTP"
+      }
+    ],
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3000/api/v1/provas/curso/590e6e53e08bc1524ddb0a63"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Provas[]",
+            "optional": false,
+            "field": "Prova",
+            "description": "<p>Provas requisitadas</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de corpo de resposta com sucesso",
+          "content": "[\n {\n   \"_id\": \"5930aaf6d817660e45dfb8eb\",\n   \"periodo\": \"2005.2\",\n   \"tipo\": \"Normal\",\n   \"disciplina\": \"BANCO DE DADOS\",\n   \"curso\": {\n     \"nome\": \"CIÊNCIAS DA COMPUTAÇÃO - João Pessoa - Presencial - MT - BACHARELADO\",\n     \"centro\": \"CENTRO DE INFORMÁTICA (CI) (11.00.64)\"\n   },\n   \"dateUploaded\": \"2017-06-02T00:01:58.950Z\"\n }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "404",
+            "optional": false,
+            "field": "ProvaNaoEncontrada",
+            "description": "<p>Prova não foi encontrada</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "404",
+            "optional": false,
+            "field": "CursoNaoEncontrado",
+            "description": "<p>Curso não foi encontrado</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de erro",
+          "content": "{\n \"message\": \"Prova não encontrada\",\n \"parametros\": {\n   \"id\": \"590e6aa53e08bc1524ddba63\"\n }\n}",
+          "type": "json"
+        },
+        {
+          "title": "Exemplo de erro",
+          "content": "{\n \"message\": \"Curso não encontrado\",\n \"parametros\": {\n   \"id\": \"590e6aa53e08bc1524ddba63\"\n }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "api/routes/prova.js",
+    "groupTitle": "Provas"
+  },
+  {
+    "type": "get",
+    "url": "/provas/disciplina/:id",
+    "title": "GET todas as provas de uma Disciplina",
+    "name": "GetProvasByDisciplina",
+    "group": "Provas",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Identificador da disciplina</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Retorna todas as provas de uma disciplina especificada pelo id</p>",
+    "examples": [
+      {
+        "title": "Exemplo de uso",
+        "content": "GET /api/v1/provas/disciplina/590e6e53e08bc1524ddb0a63 HTTP/1.1",
+        "type": "HTTP"
+      }
+    ],
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3000/api/v1/provas/disciplina/590e6e53e08bc1524ddb0a63"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Provas[]",
+            "optional": false,
+            "field": "Prova",
+            "description": "<p>Provas requisitadas</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de corpo de resposta com sucesso",
+          "content": "[\n {\n   \"_id\": \"5930aaf6d817660e45dfb8eb\",\n   \"periodo\": \"2005.2\",\n   \"tipo\": \"Normal\",\n   \"disciplina\": \"BANCO DE DADOS\",\n   \"curso\": {\n     \"nome\": \"CIÊNCIAS DA COMPUTAÇÃO - João Pessoa - Presencial - MT - BACHARELADO\",\n     \"centro\": \"CENTRO DE INFORMÁTICA (CI) (11.00.64)\"\n   },\n   \"dateUploaded\": \"2017-06-02T00:01:58.950Z\"\n }\n]",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "404",
+            "optional": false,
+            "field": "ProvaNaoEncontrada",
+            "description": "<p>Prova não foi encontrada</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "type": "404",
+            "optional": false,
+            "field": "DisciplinaNaoEncontrada",
+            "description": "<p>Disciplina não foi encontrada</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de erro",
+          "content": "{\n \"message\": \"Prova não encontrada\",\n \"parametros\": {\n   \"id\": \"590e6aa53e08bc1524ddba63\"\n }\n}",
+          "type": "json"
+        },
+        {
+          "title": "Exemplo de erro",
+          "content": "{\n \"message\": \"Disciplina não encontrada\",\n \"parametros\": {\n   \"id\": \"590e6aa53e08bc1524ddba63\"\n }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "api/routes/prova.js",
+    "groupTitle": "Provas"
   }
 ] });

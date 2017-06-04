@@ -2,6 +2,48 @@ const fs = require('fs');
 var ProvaSchema = require('../../business/schemas/provaSchema');
 
 class ProvaMongoORM {
+
+    get(req, res) {
+        var filters = req.query;
+        var response = {};
+
+        var query = ProvaSchema.find(filters, '-__v -pontos -pdf');
+        query.where('pontos').gt(2);
+        query.exec((err, provas) => {
+            if (err) {
+                response.message = "Erro interno no servidor";
+                console.log(err.message);
+                res.status(500).send(response);
+            } else if (provas) {
+                res.send(provas);
+            } else {
+                response.message = "Provas não encontradas";
+                response.pesquisa = req.query;
+                res.status(404).send(response);
+            }
+        });
+    }
+
+    getById(req, res) {
+        var id = req.params.id;
+        var response = {};
+
+        var query = ProvaSchema.findById(id, '-__v -pontos -pdf');
+        query.where('pontos').gt(2);
+        query.exec((err, prova) => {
+            if (err) {
+                response.message = "Erro interno do servidor";
+                console.log(err);
+                res.status(500).send(response);
+            } else if (prova) {
+                res.send(prova);
+            } else {
+                response.message = "Prova não encontrada";
+                response.parametros = req.params;
+                res.status(404).send(response);
+            }
+        });
+    }
     delete(req, res) {
         var id = req.params.id;
 
@@ -52,7 +94,7 @@ class ProvaMongoORM {
                     try {
                         fs.unlinkSync(prova.pdf.path);
                     } catch (err) {
-                        if (err.code !== 'ENOENT'){
+                        if (err.code !== 'ENOENT') {
                             console.log(err);
                             throw (err);
                         }
