@@ -7,6 +7,10 @@ class DisciplinaCommand {
     this._disciplinaOrm.get(req, res);
   }
 
+  getById(req, res) {
+    this._disciplinaOrm.getById(req, res);
+  }
+
   add(req, res) {
     this._disciplinaOrm.add(req, res);
   }

@@ -208,7 +208,7 @@ router.get('/cursos/centro/:id', (req, res, next) => {
  * @apiSuccessExample {json} Exemplo de corpo de resposta com sucesso
  {
   "message": "Curso adicionado com sucesso",
-  "centro": {
+  "curso": {
     "nome": "CIÊNCIAS DA COMPUTAÇÃO - João Pessoa - Presencial - MT - BACHARELADO",
     "centro": "CENTRO DE INFORMÁTICA (CI) (11.00.64)",
     "_id": "5930c65d0670004e06f8699c"
@@ -218,10 +218,8 @@ router.get('/cursos/centro/:id', (req, res, next) => {
  * @apiErrorExample {json} Exemplo de erro
  {
   "message": "Curso já existente",
-  "centro": { 
+  "curso": { 
     "nome": "CIÊNCIAS DA COMPUTAÇÃO - João Pessoa - Presencial - MT - BACHARELADO",
-    "centro": "CENTRO DE INFORMÁTICA (CI) (11.00.64)",
-    "_id": "5930c83c8495824fb8bad104"
   }
  }
 */

@@ -111,6 +111,7 @@ class CursoMongoORM {
       }
     });
   }
+  
   update(req, res) {
     var id = req.params.id;
     var response = {};
