@@ -9,6 +9,7 @@ var users = require('./app_server/routes/users');
 var login = require('./app_server/routes/login');
 var register = require('./app_server/routes/register');
 var dashboard = require('./app_server/routes/dashboard');
+var doc = require('./app_server/routes/doc');
 
 /**API**/
 var api_index = require('./api/routes/index');
@@ -44,6 +45,7 @@ app.use('/api/v1', api_prova);
 app.use('/', index);
 app.use('/api-admin', login);
 app.use('/register', register);
+app.use('/apidoc', doc);
 // provisório
 app.use('/dashboard', dashboard);
 
