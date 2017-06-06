@@ -24,6 +24,7 @@
     "node-fetch": "^1.6.3",
     "pdfkit": "^0.8.0",
     "pug": "~2.0.0-beta10",
+    "request": "2.81.0",
     "serve-favicon": "~2.3.2"
   }
 }

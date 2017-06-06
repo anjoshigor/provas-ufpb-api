@@ -51,6 +51,7 @@ class CentroMongoORM {
       } else {
         response.parametros = req.params;
         response.message = "Centro não encontrado";
+        res.status(404);
       }
       res.send(response);
     });
