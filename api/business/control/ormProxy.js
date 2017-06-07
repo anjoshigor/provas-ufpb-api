@@ -14,7 +14,7 @@ class OrmProxy {
             var response = {};
             response.message = "Token inválido";
             response.token = req.headers.token || '';
-            res.send(response);
+            res.status(401).send(response);
         } else {
             this._orm.add(req, res);
         }
@@ -25,7 +25,7 @@ class OrmProxy {
             var response = {};
             response.message = "Token inválido";
             response.token = req.headers.token || '';
-            res.send(response);
+            res.status(401).send(response);
         } else {
             this._orm.delete(req, res);
         }
@@ -44,7 +44,7 @@ class OrmProxy {
             var response = {};
             response.message = "Token inválido";
             response.token = req.headers.token || '';
-            res.send(response);
+            res.status(401).send(response);
         } else {
             this._orm.update(req, res);
         }
