@@ -10,14 +10,7 @@ class OrmProxy {
     }
 
     add(req, res) {
-        if (req.headers.token === null || req.headers.token !== 'mps10') {
-            var response = {};
-            response.message = "Token inválido";
-            response.token = req.headers.token || '';
-            res.status(401).send(response);
-        } else {
-            this._orm.add(req, res);
-        }
+        this._orm.add(req, res);
     }
 
     delete(req, res) {
