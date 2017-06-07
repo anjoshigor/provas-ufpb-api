@@ -23,6 +23,12 @@ Uma api de provas da universidade federal da paraíba
 
 Abra `localhost:3000`, se a tela for renderizada no browser, tudo está funcionando.
 
+### Testes unitários
+
+```console
+    npm test
+```
+
 ## Padrões de Projeto Implementados
 
 ### Singleton

@@ -397,7 +397,7 @@ router.post('/prova', (req, res, next) => {
  * @apiParam {Number} [id] Id da prova para ser atribuído ponto
  * @apiDescription Adiciona um ponto a uma prova
  * @apiExample {curl} Exemplo de uso
-
+ Em construção
  * @apiSampleRequest http://localhost:3000/api/v1/classify/59376251a785d011175f19d9/add/
  * @apiSuccess {Prova} Prova Prova com ponto adicionado
  * @apiSuccessExample {json} Exemplo de corpo de resposta com sucesso
@@ -450,7 +450,7 @@ router.put('/classify/:id/add', (req, res, next) => {
  * @apiParam {Number} [id] Id da prova para ser subtraído ponto
  * @apiDescription Subtrai um ponto a uma prova
  * @apiExample {curl} Exemplo de uso
-
+ Em construção
  * @apiSampleRequest http://localhost:3000/api/v1/classify/59376251a785d011175f19d9/sub/
  * @apiSuccess {Prova} Prova Prova com ponto subtraido
  * @apiSuccessExample {json} Exemplo de corpo de resposta com sucesso
@@ -478,18 +478,39 @@ router.put('/classify/:id/sub', (req, res, next) => {
 
         } else {
             prova.pontos--;
-            prova.save((err, prova) => {
-                if (err) {
-                    response.message = "Erro interno no servidor";
-                    console.log(err.message);
-                    res.status(500).send(response);
-                }
-                response.message = "Ponto subtraído com sucesso";
-                response.prova = prova;
-                response.prova.pdf = undefined;
-                response.prova.__v = undefined;
-                res.send(response);
-            });
+            if (prova.pontos < -2) {
+                var queryRemove = Prova.findByIdAndRemove(id);
+                queryRemove.exec((err, prova) => {
+                    if (err) {
+                        response.message = "Erro interno no servidor";
+                        console.log(err);
+                        res.status(500).send(response);
+                    } else if (prova === null) {
+                        response.message = "Prova não encontrada";
+                        response.parametros = req.params;
+                        res.status(404).send(response);
+                    } else {
+                        response.message = "Ponto subtraído com sucesso";
+                        response.prova = prova;
+                        response.prova.pdf = undefined;
+                        response.prova.__v = undefined;
+                        res.send(response);
+                    }
+                });
+            } else {
+                prova.save((err, prova) => {
+                    if (err) {
+                        response.message = "Erro interno no servidor";
+                        console.log(err.message);
+                        res.status(500).send(response);
+                    }
+                    response.message = "Ponto subtraído com sucesso";
+                    response.prova = prova;
+                    response.prova.pdf = undefined;
+                    response.prova.__v = undefined;
+                    res.send(response);
+                });
+            }
         }
     });
 

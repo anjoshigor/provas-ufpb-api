@@ -1267,6 +1267,158 @@
     "groupTitle": "Disciplinas"
   },
   {
+    "type": "put",
+    "url": "/classify/:id/add",
+    "title": "ADD ponto para Prova",
+    "name": "AddPointProva",
+    "group": "Provas",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "id",
+            "description": "<p>Id da prova para ser atribuído ponto</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Adiciona um ponto a uma prova</p>",
+    "examples": [
+      {
+        "title": "Exemplo de uso",
+        "content": "Em construção",
+        "type": "curl"
+      }
+    ],
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3000/api/v1/classify/59376251a785d011175f19d9/add/"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Prova",
+            "optional": false,
+            "field": "Prova",
+            "description": "<p>Prova com ponto adicionado</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de corpo de resposta com sucesso",
+          "content": "Em construção",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "400",
+            "optional": false,
+            "field": "BadRequest",
+            "description": "<p>Requisição inválida</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de erro",
+          "content": "Em construção",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "api/routes/prova.js",
+    "groupTitle": "Provas"
+  },
+  {
+    "type": "post",
+    "url": "/prova/",
+    "title": "ADD Prova",
+    "name": "AddProva",
+    "group": "Provas",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "file",
+            "optional": true,
+            "field": "pdf",
+            "description": "<p>Arquivo em formato pdf</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Adiciona uma nova prova</p>",
+    "examples": [
+      {
+        "title": "Exemplo de uso",
+        "content": "curl -X POST \\\n http://localhost:3000/api/v1/prova \\\n -H 'cache-control: no-cache' \\\n -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \\\n -H 'postman-token: a6401243-015b-c8d8-0c50-8aef4dc160d1' \\\n -F pdf=@Prova1BD_UFPB_2005.2.doc.pdf \\\n -F periodo=2005.2 \\\n -F 'disciplina=BANCO DE DADOS' \\\n -F tipo=Normal \\\n -F 'departamento=DEPARTAMENTO DE INFORMÁTICA' \\\n -F 'centro=CENTRO DE INFORMÁTICA (CI) (11.00.64)' \\\n -F 'curso=CIÊNCIAS DA COMPUTAÇÃO - João Pessoa - Presencial - MT - BACHARELADO'",
+        "type": "curl"
+      }
+    ],
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3000/api/v1/prova/"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Prova",
+            "optional": false,
+            "field": "Prova",
+            "description": "<p>Prova adicionada</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de corpo de resposta com sucesso",
+          "content": "{\n \"message\": \"Prova adicionada com sucesso\",\n \"prova\": {\n   \"periodo\": \"2005.2\",\n   \"tipo\": \"Normal\",\n   \"disciplina\": \"BANCO DE DADOS\",\n   \"_id\": \"59374350d3b9670b4f239a68\",\n   \"curso\": {\n       \"nome\": \"CIÊNCIAS DA COMPUTAÇÃO - João Pessoa - Presencial - MT - BACHARELADO\",\n       \"centro\": \"CENTRO DE INFORMÁTICA (CI) (11.00.64)\"\n   },\n   \"dateUploaded\": \"2017-06-07T00:05:36.236Z\"\n }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "400",
+            "optional": false,
+            "field": "BadRequest",
+            "description": "<p>Requisição inválida</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de erro",
+          "content": "{\n \"message\": \"Erro nos parametros da requisição\",\n \"requisicao\": {\n   \"periodo\": \"2005.2\",\n   \"tipo\": \"Normal\",\n   \"centro\": \"CENTRO DE INFORMÁTICA (CI) (11.00.64)\",\n   \"pdf\": \"Prova1BD_UFPB_2005.2.doc.pdf\"\n }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "api/routes/prova.js",
+    "groupTitle": "Provas"
+  },
+  {
     "type": "get",
     "url": "/provas/latest",
     "title": "GET Últimas provas adicionadas",
@@ -1636,6 +1788,82 @@
         {
           "title": "Exemplo de erro",
           "content": "{\n \"message\": \"Disciplina não encontrada\",\n \"parametros\": {\n   \"id\": \"590e6aa53e08bc1524ddba63\"\n }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "api/routes/prova.js",
+    "groupTitle": "Provas"
+  },
+  {
+    "type": "put",
+    "url": "/classify/:id/sub",
+    "title": "SUB ponto da Prova",
+    "name": "SubPointProva",
+    "group": "Provas",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": true,
+            "field": "id",
+            "description": "<p>Id da prova para ser subtraído ponto</p>"
+          }
+        ]
+      }
+    },
+    "description": "<p>Subtrai um ponto a uma prova</p>",
+    "examples": [
+      {
+        "title": "Exemplo de uso",
+        "content": "Em construção",
+        "type": "curl"
+      }
+    ],
+    "sampleRequest": [
+      {
+        "url": "http://localhost:3000/api/v1/classify/59376251a785d011175f19d9/sub/"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "Prova",
+            "optional": false,
+            "field": "Prova",
+            "description": "<p>Prova com ponto subtraido</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de corpo de resposta com sucesso",
+          "content": "Em construção",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "type": "400",
+            "optional": false,
+            "field": "BadRequest",
+            "description": "<p>Requisição inválida</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Exemplo de erro",
+          "content": "Em construção",
           "type": "json"
         }
       ]
