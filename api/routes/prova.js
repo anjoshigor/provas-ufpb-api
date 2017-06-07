@@ -65,7 +65,7 @@ var upload = multer({ storage: storage, fileFilter: filter }).single('pdf');
  }
 */
 router.get('/provas', (req, res, next) => {
-    new APIManager().get(req, res, new ProvaCommand(Factory.getProvaMongoORM()));
+    new APIManager().get(req, res, new ProvaCommand(new OrmProxy()));
 
 });
 
@@ -101,7 +101,7 @@ router.get('/provas', (req, res, next) => {
  }
 */
 router.get('/prova/:id', (req, res, next) => {
-    new APIManager().getById(req, res, new ProvaCommand(Factory.getProvaMongoORM()));
+    new APIManager().getById(req, res, new ProvaCommand(new OrmProxy()));
 });
 
 /**
@@ -327,7 +327,6 @@ router.get('/provas/latest/', (req, res, next) => {
     });
 });
 
-
 /**
  * @api {post} /prova/ ADD Prova
  * @apiName AddProva
@@ -391,30 +390,52 @@ router.post('/prova', (req, res, next) => {
 
 });
 
-/**ADD +1 ponto**/
+/**
+ * @api {post} /classify/:id/add ADD ponto para Prova
+ * @apiName AddPointProva
+ * @apiGroup Provas
+ * @apiParam {Number} [id] Id da prova para ser atribuído ponto
+ * @apiDescription Adiciona um ponto a uma prova
+ * @apiExample {curl} Exemplo de uso
+
+ * @apiSampleRequest http://localhost:3000/api/v1/classify/59376251a785d011175f19d9/add/
+ * @apiSuccess {Prova} Prova Prova com ponto adicionado
+ * @apiSuccessExample {json} Exemplo de corpo de resposta com sucesso
+ Em construção
+ * @apiError {400} BadRequest Requisição inválida
+ * @apiErrorExample {json} Exemplo de erro
+ Em construção
+*/
 router.put('/classify/:id/add', (req, res, next) => {
     var id = req.params.id;
+    var response = {};
 
     var query = Prova.findById(id);
     query.where('pontos').lt(3);
 
     query.exec((err, prova) => {
         if (err) {
+            response.message = "Erro interno no servidor";
             console.log(err.message);
-            res.status(500).send("Erro interno no servidor");
-        }
-        if (prova === null) {
-            res.status(401).send("Prova não encontrada");
-        }
-        else {
+            res.status(500).send(response);
+        } else if (prova === null) {
+            response.message = "Prova não encontrada";
+            response.parametros = req.params;
+            res.status(404).send(response);
+        } else {
             prova.pontos++;
             prova.save((err, prova) => {
                 if (err) {
-                    console.log(err);
-                    res.status(500).send("Erro interno do servidor");
-                }
 
-                res.send(prova);
+                    response.message = "Erro interno no servidor";
+                    console.log(err.message);
+                    res.status(500).send(response);
+                }
+                response.message = "Ponto atribuído com sucesso";
+                response.prova = prova;
+                response.prova.pdf = undefined;
+                response.prova.__v = undefined;
+                res.send(response);
             });
         }
     });

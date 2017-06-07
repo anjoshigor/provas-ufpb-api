@@ -4,6 +4,12 @@ var ProvaSchema = require('../../business/schemas/provaSchema');
 class ProvaMongoORM {
     add(req, res) {
         var response = {};
+        console.log(req.file);
+
+        if(req.file === undefined){
+            response.message = "PDF não enviado";
+            return res.status(400).send(response);
+        }
 
         var received = {
             "periodo": req.body.periodo || '',
