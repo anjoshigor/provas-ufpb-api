@@ -2,6 +2,51 @@ const fs = require('fs');
 var ProvaSchema = require('../../business/schemas/provaSchema');
 
 class ProvaMongoORM {
+    add(req, res) {
+        var response = {};
+
+        var received = {
+            "periodo": req.body.periodo || '',
+            "pontos": 0,
+            "tipo": req.body.tipo || 'Normal',
+            "dateUploaded": Date.now(),
+            "disciplina": req.body.disciplina || '',
+            "curso": {
+                "nome": req.body.curso || '',
+                "centro": req.body.centro
+            },
+            "pdf": {
+                "filename": req.file.filename,
+                "path": req.file.path,
+                "size": req.file.size
+            }
+        }
+
+        var newProva = new ProvaSchema(received);
+
+        newProva.save((err, createdProva) => {
+            if (err) {
+                if (err.name = 'ValidationError') {
+                    response.message = "Erro nos parametros da requisição";
+                    response.requisicao = req.body;
+                    response.requisicao.pdf = req.file.originalname;
+                    res.status(400);
+                } else {
+                    response.message = "Erro interno no servidor";
+                    console.log(err);
+                    res.status(500);
+                }
+                res.send(response);
+            } else {
+                createdProva.pdf = undefined;
+                createdProva.__v = undefined;
+                createdProva.pontos = undefined;
+                res.send(createdProva);
+            }
+        });
+
+
+    }
 
     get(req, res) {
         var filters = req.query;
@@ -14,7 +59,7 @@ class ProvaMongoORM {
                 response.message = "Erro interno no servidor";
                 console.log(err.message);
                 res.status(500).send(response);
-            } else if (provas) {
+            } else if (provas.length > 0) {
                 res.send(provas);
             } else {
                 response.message = "Provas não encontradas";

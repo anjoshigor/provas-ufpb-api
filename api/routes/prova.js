@@ -5,6 +5,7 @@ var Prova = require('../business/schemas/provaSchema');
 var Curso = require('../business/schemas/cursoSchema');
 var Disciplina = require('../business/schemas/disciplinaSchema');
 var Factory = require('../util/ormFactory');
+var OrmProxy = require('../business/control/ormProxy');
 var APIManager = require('../business/control/apiManager');
 var ProvaCommand = require('../business/control/provaCommand');
 var fs = require('fs');
@@ -327,44 +328,65 @@ router.get('/provas/latest/', (req, res, next) => {
 });
 
 
-/**ADD prova**/
+/**
+ * @api {post} /prova/ ADD Prova
+ * @apiName AddProva
+ * @apiGroup Provas
+ * @apiParam {file} [pdf] Arquivo em formato pdf
+ * @apiDescription Adiciona uma nova prova
+ * @apiExample {curl} Exemplo de uso
+ curl -X POST \
+  http://localhost:3000/api/v1/prova \
+  -H 'cache-control: no-cache' \
+  -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW' \
+  -H 'postman-token: a6401243-015b-c8d8-0c50-8aef4dc160d1' \
+  -F pdf=@Prova1BD_UFPB_2005.2.doc.pdf \
+  -F periodo=2005.2 \
+  -F 'disciplina=BANCO DE DADOS' \
+  -F tipo=Normal \
+  -F 'departamento=DEPARTAMENTO DE INFORMÁTICA' \
+  -F 'centro=CENTRO DE INFORMÁTICA (CI) (11.00.64)' \
+  -F 'curso=CIÊNCIAS DA COMPUTAÇÃO - João Pessoa - Presencial - MT - BACHARELADO'
+ * @apiSampleRequest http://localhost:3000/api/v1/prova/
+ * @apiSuccess {Prova} Prova Prova adicionada
+ * @apiSuccessExample {json} Exemplo de corpo de resposta com sucesso
+ {
+  "message": "Prova adicionada com sucesso",
+  "prova": {
+    "periodo": "2005.2",
+    "tipo": "Normal",
+    "disciplina": "BANCO DE DADOS",
+    "_id": "59374350d3b9670b4f239a68",
+    "curso": {
+        "nome": "CIÊNCIAS DA COMPUTAÇÃO - João Pessoa - Presencial - MT - BACHARELADO",
+        "centro": "CENTRO DE INFORMÁTICA (CI) (11.00.64)"
+    },
+    "dateUploaded": "2017-06-07T00:05:36.236Z"
+  }
+ }
+ * @apiError {400} BadRequest Requisição inválida
+ * @apiErrorExample {json} Exemplo de erro
+ {
+  "message": "Erro nos parametros da requisição",
+  "requisicao": {
+    "periodo": "2005.2",
+    "tipo": "Normal",
+    "centro": "CENTRO DE INFORMÁTICA (CI) (11.00.64)",
+    "pdf": "Prova1BD_UFPB_2005.2.doc.pdf"
+  }
+ }
+*/
 router.post('/prova', (req, res, next) => {
+    var response = {};
 
     upload(req, res, (err) => {
         if (err) {
-            res.send(err.message);
+            response.message = "Falha no upload do arquivo";
+            console.log(err);
+            res.status(500).send(response);
+        } else {
+            new APIManager().add(req, res, new ProvaCommand(new OrmProxy()));
         }
-
-
-        var received = {
-            "periodo": req.body.periodo || '',
-            "pontos": 0,
-            "tipo": req.body.tipo || 'Normal',
-            "dateUploaded": Date.now(),
-            "disciplina": req.body.disciplina || '',
-            "curso": {
-                "nome": req.body.curso || '',
-                "centro": req.body.centro
-            },
-            "pdf": {
-                "filename": req.file.filename,
-                "path": req.file.path,
-                "size": req.file.size
-            }
-        }
-
-        var newProva = new Prova(received);
-
-        newProva.save((err, createdProva) => {
-            if (err) {
-                console.log(err);
-                res.status(500).send("Erro interno do servidor");
-            }
-            createdProva.pdf = undefined;
-            res.send(createdProva);
-        });
-
-
     });
 
 });
@@ -431,8 +453,15 @@ router.put('/classify/:id/sub', (req, res, next) => {
 
 /**UPDATE prova*/
 router.put('/prova/:id', (req, res, next) => {
+    var response = {};
     upload(req, res, (err) => {
-        new APIManager().update(req, res, Factory.getProvaMongoORM());
+        if (err) {
+            response.message = "Falha no upload do arquivo";
+            console.log(err);
+            res.status(500).send(response);
+        } else {
+            new APIManager().update(req, res, new ProvaCommand(new OrmProxy()));
+        }
     });
 });
 
@@ -535,7 +564,7 @@ router.get('/download/prova/classify/:id', (req, res, next) => {
 
 /**Delete uma prova**/
 router.delete('/prova/:id', (req, res, next) => {
-    new APIManager().delete(req, res, Factory.getProvaMongoORM());
+    new APIManager().delete(req, res, new ProvaCommand(new OrmProxy()));
 });
 
 module.exports = router;
