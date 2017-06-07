@@ -391,7 +391,7 @@ router.post('/prova', (req, res, next) => {
 });
 
 /**
- * @api {post} /classify/:id/add ADD ponto para Prova
+ * @api {put} /classify/:id/add ADD ponto para Prova
  * @apiName AddPointProva
  * @apiGroup Provas
  * @apiParam {Number} [id] Id da prova para ser atribuído ponto
@@ -442,30 +442,53 @@ router.put('/classify/:id/add', (req, res, next) => {
 
 });
 
-/**ADD -1 ponto**/
+
+/**
+ * @api {put} /classify/:id/sub SUB ponto da Prova
+ * @apiName SubPointProva
+ * @apiGroup Provas
+ * @apiParam {Number} [id] Id da prova para ser subtraído ponto
+ * @apiDescription Subtrai um ponto a uma prova
+ * @apiExample {curl} Exemplo de uso
+
+ * @apiSampleRequest http://localhost:3000/api/v1/classify/59376251a785d011175f19d9/sub/
+ * @apiSuccess {Prova} Prova Prova com ponto subtraido
+ * @apiSuccessExample {json} Exemplo de corpo de resposta com sucesso
+ Em construção
+ * @apiError {400} BadRequest Requisição inválida
+ * @apiErrorExample {json} Exemplo de erro
+ Em construção
+*/
 router.put('/classify/:id/sub', (req, res, next) => {
     var id = req.params.id;
+    var response = {};
 
     var query = Prova.findById(id);
     query.where('pontos').lt(3);
     query.exec((err, prova) => {
 
         if (err) {
+            response.message = "Erro interno no servidor";
             console.log(err.message);
-            res.status(500).send("Erro interno no servidor");
-        }
-
-        if (prova === null) {
-            res.status(401).send("Prova não encontrada");
+            res.status(500).send(response);
+        } else if (prova === null) {
+            response.message = "Prova não encontrada";
+            response.parametros = req.params;
+            res.status(404).send(response);
 
         } else {
             prova.pontos--;
             prova.save((err, prova) => {
                 if (err) {
-                    console.log(err);
-                    res.status(500).send("Erro interno do servidor");
+                    response.message = "Erro interno no servidor";
+                    console.log(err.message);
+                    res.status(500).send(response);
                 }
-                res.send(prova);
+                response.message = "Ponto subtraído com sucesso";
+                response.prova = prova;
+                response.prova.pdf = undefined;
+                response.prova.__v = undefined;
+                res.send(response);
             });
         }
     });
@@ -490,11 +513,16 @@ router.put('/prova/:id', (req, res, next) => {
 /**Get download prova**/
 router.get('/download/prova/:id', (req, res, next) => {
     var id = req.params.id;
-
+    var response = {};
     Prova.findById(id, (err, prova) => {
         if (err) {
-            console.log(err.message);
-            res.status(500).send("Erro interno no servidor");
+            response.message = "Erro interno no servidor";
+            res.status(500).send(response);
+            console.log(err);
+        } else if (prova === null) {
+            response.message = "Prova não encontrada";
+            response.parametros = req.params;
+            res.status(404).send(response);
         } else {
             fs.stat(prova.pdf.path, (err, stat) => {
                 if (err == null) {
@@ -504,11 +532,17 @@ router.get('/download/prova/:id', (req, res, next) => {
                         if (err) {
                             console.log(err);
                             res.status(500).send("Erro interno do servidor");
+                        } else if (prova === null) {
+
+                            response.message = "Prova não encontrada";
+                            reponse.parametros = req.params;
+                            res.status(404).send(response);
                         }
-                        res.status(401).send("Prova não encontrada");
                     });
                 } else {
-                    res.status(500).send("Erro interno no servidor");
+                    response.message = "Erro interno no servidor";
+                    res.status(500).send(response);
+                    console.log(err);
                 }
             });
         }
@@ -554,15 +588,20 @@ router.get('/classify/provas', (req, res, next) => {
 /**Get download prova pra classificar**/
 router.get('/download/prova/classify/:id', (req, res, next) => {
     var id = req.params.id;
+    var response = {};
     var query = Prova.findById(id);
     query.where('pontos').lt(3);
     query.exec((err, prova) => {
         if (err) {
-            console.log(err.message);
-            res.status(500).send("Erro interno no servidor");
+            response.message = "Erro interno no servidor";
+            res.status(500).send(response);
+            console.log(err);
         }
         if (prova === null) {
-            res.status(401).send("Prova não encontrada");
+            response.message = "Prova não encontrada";
+            response.parametros = req.params;
+            res.status(404).send(response);
+            console.log(err);
         } else {
             fs.stat(prova.pdf.path, (err, stat) => {
                 if (err == null) {
@@ -570,13 +609,22 @@ router.get('/download/prova/classify/:id', (req, res, next) => {
                 } else if (err.code == 'ENOENT') {
                     Prova.findByIdAndRemove(id, (err, prova) => {
                         if (err) {
+
+                            response.message = "Erro interno no servidor";
+                            res.status(500).send(response);
                             console.log(err);
-                            res.status(500).send("Erro interno do servidor");
                         }
-                        res.status(401).send("Prova não encontrada");
+
+                        response.message = "Prova não encontrada";
+                        reponse.parametros = req.params;
+                        res.status(404).send(response);
+
                     });
                 } else {
-                    res.status(500).send("Erro interno no servidor");
+
+                    response.message = "Erro interno no servidor";
+                    res.status(500).send(response);
+                    console.log(err);
                 }
             });
         }

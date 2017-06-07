@@ -6,7 +6,7 @@ class ProvaMongoORM {
         var response = {};
         console.log(req.file);
 
-        if(req.file === undefined){
+        if (req.file === undefined) {
             response.message = "PDF não enviado";
             return res.status(400).send(response);
         }
@@ -104,27 +104,29 @@ class ProvaMongoORM {
             };
 
             if (err) {
+                response.message = "Erro interno no servidor";
                 console.log(err);
-                res.status(500).send("Erro interno do servidor");
-            }
-
-            if (prova) {
-                response.disciplina = prova.disciplina;
-                response.periodo = prova.periodo;
-                response.id = prova._id;
-                console.log(prova);
+                res.status(500).send(response);
+            } else if (prova) {
 
                 fs.unlink(prova.pdf.path, (err) => {
                     if (err) {
+                        response.message = "Erro interno no servidor";
                         console.log(err);
-                        res.status(500).send("Erro interno do servidor");
+                        res.status(500).send(response);
                     } else {
+                        response.message = "Prova deletada com sucesso";
+                        response.prova = prova;
+                        response.prova.pdf = undefined;
+                        response.prova.__v = undefined;
+                        response.prova.pontos = undefined;
                         res.send(response);
                     }
                 });
 
             } else {
                 response.message = "Prova não encontrada";
+                response.parametros = req.params;
                 res.send(response);
             }
         });
@@ -132,10 +134,11 @@ class ProvaMongoORM {
 
     update(req, res) {
         var id = req.params.id;
-
-        ProvaSchema.findById(id, function (err, prova) {
+        var response = {};
+        ProvaSchema.findById(id, (err, prova) => {
             if (err) {
-                res.status(500).send("Erro interno do servidor");
+                response.message = "Erro interno no servidor";
+                res.status(500).send(response);
                 console.log(err);
             } else {
 
@@ -149,6 +152,9 @@ class ProvaMongoORM {
                             console.log(err);
                             throw (err);
                         }
+                        response.message = "Erro interno no servidor";
+                        res.status(500).send(response);
+                        console.log(err);
                     }
 
                     prova.pdf.filename = req.file.filename || prova.pdf.filename;
@@ -162,12 +168,18 @@ class ProvaMongoORM {
                 prova.curso.nome = req.body.curso || prova.curso.nome;
                 prova.curso.centro = req.body.centro || prova.curso.centro;
 
-                prova.save(function (err, prova) {
+                prova.save((err, prova) => {
                     if (err) {
+                        response.message = "Erro interno no servidor";
+                        res.status(500).send(response);
                         console.log(err);
-                        res.status(500).send("Erro interno do Servidor");
                     }
-                    res.send(prova);
+                    response.message = "Prova atualizada com sucesso";
+                    response.prova = prova;
+                    response.prova.__v = undefined;
+                    response.prova.pontos = undefined;
+                    response.prova.pdf = undefined;
+                    res.send(response);
                 });
             }
         });
