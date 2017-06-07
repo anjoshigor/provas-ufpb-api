@@ -23,52 +23,371 @@ Uma api de provas da universidade federal da paraíba
 
 Abra `localhost:3000`, se a tela for renderizada no browser, tudo está funcionando.
 
-## URLs funcionando até o momento
+## Padrões de Projeto Implementados
 
-### Centros
+### Singleton
 
-VERBO|URL|PARÂMETRO|BODY|DESCRIÇÃO
------|-----|-----|------|--------
-GET| http://localhost:3000/api/v1/centros?nome=<nome\> | nome ou vazio | - | Traz um centro ou um conjunto de centros que correspondem à pesquisa pelo nome
-GET| http://localhost:3000/api/v1/centro/<id\> | id | - | Traz um centro pelo id indicado
-POST| http://localhost:3000/api/v1/centro/ | - |{ nome: "nome do centro" } | Adiciona um novo centro caso não exista com esse nome
-PUT| http://localhost:3000/api/v1/centro/<id\> | id |{ nome: "nome do centro" } | Atualiza o campo nome do centro indicado pelo id
-DELETE| http://localhost:3000/api/v1/centro/<id\> | id | - | Deleta o centro indicado pelo id
+```js
+var instance = null;
+
+class UserDAO {
+
+	constructor(database) {
+		if (!instance) {
+			instance = this;
+		}
+
+		this._database = database;
+		return instance;
+
+	}
+```
+
+### Adapter
+
+```js
+//userController.js
+class UserController {
+  constructor() {
+    this._UserDAO = new UserDAO(DatabaseFactory.getFileDB());
+  }
+
+getAll() {
+		//ler do arquivo
+		try {
+			var data = fs.readFileSync(this._filePath, 'utf8');
+			this._map = new Map(JSON.parse(data));
+			return this._map;
+		} catch (error) {
+			console.log(error);
+			throw new IOError('Falha na leitura do arquivo ' + this._filePath);
+		}
+
+}
+...
+
+//userDao.js
+var instance = null;
+
+class UserDAO {
+
+	constructor(database) {
+		if (!instance) {
+			instance = this;
+		}
+        //adapter
+		this._database = database;
+		return instance;
+
+	}
+...
 
 
-### Cursos
+//fileDatabase.js
+class FileDatabase extends Database {
 
-VERBO|URL|PARÂMETRO|BODY|DESCRIÇÃO
------|-----|-----|------|--------
-GET| http://localhost:3000/api/v1/cursos?nome=<nome\>&centro<centro\> | nome, centro ou vazio | - | Traz um curso ou um conjunto de cursos filtrados por nome, centro, ou ambos
-GET| http://localhost:3000/api/v1/curso/<id\> | id | - | Traz um curso pelo id indicado
-GET| http://localhost:3000/api/v1/cursos/centro/<id\> | id | - | Traz os cursos de um centro indicado pelo id 
-POST| http://localhost:3000/api/v1/curso/ | - |{ nome: "nome do curso", centro: "nome do centro" } | Adiciona um novo curso caso não exista com esse nome
-PUT| http://localhost:3000/api/v1/curso/<id\> | id |{ nome: "nome do curso", centro: "nome do centro" } | Atualiza o campo nome e/ou centro do curso indicado pelo id
-DELETE| http://localhost:3000/api/v1/curso/<id\> | id | - | Deleta o curso indicado pelo id
+	constructor(filePath) {
+		super();
+		this._filePath = filePath;
+		this._map = new Map();
+	}
+...
+
+//database.js
+class Database {
+	constructor(){
+		if(new.target === Database){
+			throw new TypeError("Cannot construct Abstract instances directly");
+		}
+	}
+	getAll(){
+		throw new TypeError("Cannot call Abstract methods directly");
+	}
+
+	add(user){
+		throw new TypeError("Cannot call Abstract methods directly");
+	}
+
+	delete(user){
+		throw new TypeError("Cannot call Abstract methods directly");
+	}
+
+	get(user){
+		throw new TypeError("Cannot call Abstract methods directly");
+	}
+
+}
+
+```
+
+### Template
+
+```js
+//report.js
+class Report {
+  constructor() {
+    if (new.target === Report) {
+      throw new TypeError("Cannot construct Abstract instances directly");
+    }
+  }
+
+  save(data) {
+    throw new TypeError("Cannot use Abstract methods directly! You must Override!");
+  }
+
+  generate() {
+    var user = new UserDAO(DatabaseFactory.getFileDB());
+    var users = user.getUsers();
+    var data = '';
+    var path = '';
+    for (var [key, value] of users) {
+      data += key + " " +value+"\n";
+    }
+    return this.save(data);
+  }
+}
+
+//reportFile.js
+class ReportFile extends Report {
+    constructor(){
+        super();
+    }
+
+    save(data){
+        var datetime = new Date().toJSON().slice(0,10)+ "-" + new Date(new Date()).toString().split(' ')[4];
+
+        var path = './reports/'+datetime+'.txt';
+        fs.writeFileSync(path, data);
+        //retorna apenas o caminho
+        return path;
+    }
 
 
-### Disciplinas
+}
 
-VERBO|URL|PARÂMETRO|BODY|DESCRIÇÃO
------|-----|-----|------|--------
-GET| http://localhost:3000/api/v1/disciplinas?nome=<nome\> | nome ou vazio | - | Traz uma disciplina ou um conjunto de disciplinas filtradas por nome
-GET| http://localhost:3000/api/v1/disciplina/<id\> | id | - | Traz uma disciplina pelo id indicado
-POST| http://localhost:3000/api/v1/disciplina/ | - |{ nome: "nome da disciplina"} | Adiciona uma nova disciplina caso não exista com esse nome
-PUT| http://localhost:3000/api/v1/disciplina/<id\> | id |{ nome: "nome da disciplina"} | Atualiza o campo nome da disciplina indicada pelo id
-DELETE| http://localhost:3000/api/v1/disciplina/<id\> | id | - | Deleta a disciplina indicada pelo id
+//reportPDF.js
+class ReportPDF extends Report {
+    constructor() {
+        super();
+    }
+
+    save(data) {
+
+        var datetime = new Date().toJSON().slice(0, 10) + "-" + new Date(new Date()).toString().split(' ')[4];
+        var path = './reports/' + datetime + '.pdf';
+
+        //estilo do pdf
+        var pdf = new PDFDocument({
+            size: 'LEGAL',
+            info: {
+                Title: 'Report of' + ' datetime',
+                Author: 'Admin',
+            }
+        });
+
+        // Diz onde será escrito
+        var stream = fs.createWriteStream(path);
+        pdf.pipe(stream);
+
+        // Insere os dados
+        pdf.text(data);
 
 
-### Provas
+        // Fecha o pdf
+        pdf.end();
 
-VERBO|URL|PARÂMETRO|BODY|DESCRIÇÃO
------|-----|-----|------|--------
-GET| http://localhost:3000/api/v1/provas | - | - | Traz um conjunto de provas que já foram classificadas e estão dentro do padrão
-GET| http://localhost:3000/api/v1/classify/prova | - | - | Traz uma prova randômica que ainda não foi classificada como dentro do padrão
-GET| http://localhost:3000/api/v1/classify/provas | - | - | Traz um conjunto de provas que ainda não foram classificadas como dentro do padrão
-GET| http://localhost:3000/api/v1/download/prova/:id | id |- | Faz o download de uma prova para classificar
-POST| http://localhost:3000/api/v1/prova/ | - |form-data { pdf: arquivo em formato pdf, periodo: 2017.1, disciplina: nome da disciplina, tipo: Normal \| Reposição \| Final, departamento: nome do departamento, centro: nome do centro, curso: nome do curso} | Adiciona uma nova prova
-PUT| http://localhost:3000/api/v1/classify/:id/add | id |- | Adiciona um ponto na classificacao da prova com id informado
-PUT| http://localhost:3000/api/v1/classify/:id/sub | id |- | Subtrai um ponto na classificacao da prova com id informado
-PUT| http://localhost:3000/api/v1/prova/:id | id | form-data { pdf: arquivo em formato pdf, periodo: 2017.1, disciplina: nome da disciplina, tipo: Normal \| Reposição \| Final, departamento: nome do departamento, centro: nome do centro, curso: nome do curso} | Atualiza uma prova com o id informado
-DELETE| http://localhost:3000/api/v1/prova/:id | id |- | Remove a prova com id informado
+        //retorna o caminho e o stream para ser verificado
+        return {path, stream};
+    }
+
+
+}
+```
+
+### Factory Method
+
+```js
+//ormFactory.js
+class ORMFactory {
+  constructor() {
+    if(new.target === ORMFactory)
+      throw new TypeError("Cannot construct Abstract instances directly");
+  }
+
+  static getCentroMongoORM(){
+    return new CentroMongoORM();
+  }
+
+  static getCursoMongoORM(){
+    return new CursoMongoORM();
+  }
+
+  static getDisciplinaMongoORM(){
+    return new DisciplinaMongoORM();
+  }
+
+  static getProvaMongoORM(){
+    return new ProvaMongoORM();
+  }
+}
+
+//ormDic.js
+var ormDic = {
+   "prova": Factory.getProvaMongoORM(),
+   "centro": Factory.getCentroMongoORM(),
+   "disciplina": Factory.getDisciplinaMongoORM(),
+   "curso": Factory.getCursoMongoORM()
+  }
+
+```
+
+### Command
+
+```js
+//provaCommand.js
+class ProvaCommand {
+  constructor(proxy) {
+    this._provaProxy = proxy;
+    proxy.setOrm('prova');
+  }
+
+  get(req, res) {
+    this._provaProxy.get(req, res);
+  }
+
+  getById(req, res) {
+    this._provaProxy.getById(req, res);
+  }
+
+  add(req, res) {
+    this._provaProxy.add(req, res);
+  }
+
+  delete(req, res) {
+    this._provaProxy.delete(req, res);
+  }
+
+  update(req, res) {
+    this._provaProxy.update(req, res);
+  }
+}
+
+//routes/prova.js
+...
+router.get('/provas', (req, res, next) => {
+    new APIManager().get(req, res, new ProvaCommand(new OrmProxy()));
+
+});
+...
+```
+
+### Facade
+
+```js
+//apiManager.js
+class APIManager {
+  constructor() { }
+
+  initialize() {
+    //está sendo chamada na conexao com mongo
+    SIGAA.getAllCentros();
+    SIGAA.getAllCursos();
+    SIGAA.getAllDisciplinas();
+  }
+
+  get(req, res, cmd) {
+    cmd.get(req, res);
+  }
+
+  getById(req, res, cmd) {
+    cmd.getById(req, res);
+  }
+  add(req, res, cmd) {
+    cmd.add(req, res);
+  }
+
+  delete(req, res, cmd) {
+    cmd.delete(req, res);
+  }
+
+  update(req, res, cmd) {
+    cmd.update(req, res);
+  }
+}
+
+//routes/prova.js
+...
+router.get('/provas', (req, res, next) => {
+    new APIManager().get(req, res, new ProvaCommand(new OrmProxy()));
+
+});
+...
+
+
+```
+
+### Proxy
+
+```js
+//ormProxy.js
+class OrmProxy {
+    constructor() {
+        this._orm = null;
+    }
+
+    setOrm(string) {
+        this._orm = ormDic[string];
+    }
+
+    add(req, res) {
+        if (req.headers.token === null || req.headers.token !== 'mps10') {
+            var response = {};
+            response.message = "Token inválido";
+            response.token = req.headers.token || '';
+            res.send(response);
+        } else {
+            this._orm.add(req, res);
+        }
+    }
+
+    delete(req, res) {
+        if (req.headers.token === null || req.headers.token !== 'mps10') {
+            var response = {};
+            response.message = "Token inválido";
+            response.token = req.headers.token || '';
+            res.send(response);
+        } else {
+            this._orm.delete(req, res);
+        }
+    }
+...
+
+//provaCommand.js
+class ProvaCommand {
+  constructor(proxy) {
+    this._provaProxy = proxy;
+    proxy.setOrm('prova');
+  }
+
+  get(req, res) {
+    this._provaProxy.get(req, res);
+  }
+
+  getById(req, res) {
+    this._provaProxy.getById(req, res);
+  }
+
+  add(req, res) {
+    this._provaProxy.add(req, res);
+  }
+
+  delete(req, res) {
+    this._provaProxy.delete(req, res);
+  }
+
+  update(req, res) {
+    this._provaProxy.update(req, res);
+  }
+}
+
+```
